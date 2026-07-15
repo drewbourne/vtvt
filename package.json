@@ -1,0 +1,34 @@
+{
+  "name": "with-otel",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "gen": "turbo run gen --ui stream --concurrency 1",
+    "lint": "turbo run lint",
+    "format": "oxfmt --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.58.0",
+    "turbo": "^2.10.4",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "yarn",
+      "version": "4.17.1"
+    }
+  },
+  "workspaces": [
+    "apps/*",
+    "crons/*",
+    "domains/*",
+    "infra/*",
+    "packages/*",
+    "ui/*"
+  ]
+}
