@@ -8,8 +8,8 @@ const operations = [ListAccountsOperation];
 export class AccountsServiceWorker {
   constructor(
     private accountsService: AccountsService,
-    private logger: Logger,
     private nats: NatsService,
+    private logger: Logger,
   ) {}
 
   async start() {

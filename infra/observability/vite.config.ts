@@ -12,10 +12,9 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(import.meta.dirname, "src/index.ts"),
-        awilix: resolve(import.meta.dirname, "src/awilix.ts"),
       },
       name: packageJson.name,
-      fileName: "index",
+      fileName: (format, entry) => `${entry}.${format}`,
       formats: ["es"],
     },
     outDir: "dist",

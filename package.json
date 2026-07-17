@@ -1,5 +1,5 @@
 {
-  "name": "with-otel",
+  "name": "@fbt/vtvt",
   "private": true,
   "scripts": {
     "build": "turbo run build",

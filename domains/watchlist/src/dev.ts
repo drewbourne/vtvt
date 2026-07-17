@@ -1,13 +1,12 @@
-import { getLogger, configure, getConsoleSink } from "@logtape/logtape";
+import { configure, getConsoleSink } from "@logtape/logtape";
 import { getPrettyFormatter } from "@logtape/pretty";
-import { WatchlistService } from "./service.js";
-import { WatchlistServiceWorker } from "./worker.js";
-import { NatsService } from "@fbt/nats";
+import { watchlistWorkerContainer } from "./container.js";
 
-const name = "@fbt/watchlist";
-const logger = getLogger([name]);
+const { loggerBase: logger } = watchlistWorkerContainer.cradle;
 
 async function main() {
+  const { service } = watchlistWorkerContainer.cradle;
+
   await configure({
     sinks: {
       console: getConsoleSink({
@@ -20,30 +19,21 @@ async function main() {
         lowestLevel: "warning",
         sinks: ["console"],
       },
-      { category: name, lowestLevel: "debug", sinks: ["console"] },
+      {
+        category: [service],
+        lowestLevel: "debug",
+        sinks: ["console"],
+      },
     ],
   });
-  logger.info("logging configured");
 
-  const nats = new NatsService(logger.getChild("nats"));
-  logger.info("nats created");
+  const { watchlistWorker } = watchlistWorkerContainer.cradle;
 
-  const watchlistService = new WatchlistService(
-    logger.getChild("watchlistService"),
-  );
-  logger.info("watchlistService created");
+  logger.info("watchlistWorker starting");
 
-  const worker = new WatchlistServiceWorker(
-    watchlistService,
-    logger.getChild("worker"),
-    nats,
-  );
-  logger.info("worker created");
+  await watchlistWorker.start();
 
-  logger.info("worker starting");
-  await worker.start();
-
-  logger.info("worker started");
+  logger.info("watchlistWorker started");
 }
 
 main().catch((error) => logger.error(error));

@@ -1,11 +1,8 @@
-import { getLogger, configure, getConsoleSink } from "@logtape/logtape";
+import { configure, getConsoleSink } from "@logtape/logtape";
 import { getPrettyFormatter } from "@logtape/pretty";
-import { AccountsService } from "./service.js";
-import { AccountsServiceWorker } from "./worker.js";
-import { NatsService } from "@fbt/nats";
+import { accountsWorkerContainer } from "./container.js";
 
-const name = "@fbt/accounts";
-const logger = getLogger([name]);
+const { loggerBase: logger, service } = accountsWorkerContainer.cradle;
 
 async function main() {
   await configure({
@@ -20,30 +17,21 @@ async function main() {
         lowestLevel: "warning",
         sinks: ["console"],
       },
-      { category: name, lowestLevel: "debug", sinks: ["console"] },
+      {
+        category: [service],
+        lowestLevel: "debug",
+        sinks: ["console"],
+      },
     ],
   });
-  logger.info("logging configured");
 
-  const nats = new NatsService(logger.getChild("nats"));
-  logger.info("nats created");
+  const { accountsWorker } = accountsWorkerContainer.cradle;
 
-  const accountsService = new AccountsService(
-    logger.getChild("accountsService"),
-  );
-  logger.info("accountsService created");
+  logger.info("accountsWorker starting");
 
-  const worker = new AccountsServiceWorker(
-    accountsService,
-    logger.getChild("worker"),
-    nats,
-  );
-  logger.info("worker created");
+  await accountsWorker.start();
 
-  logger.info("worker starting");
-  await worker.start();
-
-  logger.info("worker started");
+  logger.info("accountsWorker started");
 }
 
 main().catch((error) => logger.error(error));

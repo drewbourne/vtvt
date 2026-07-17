@@ -1,9 +1,8 @@
-import { getLogger, configure, getConsoleSink } from "@logtape/logtape";
+import { configure, getConsoleSink } from "@logtape/logtape";
 import { getPrettyFormatter } from "@logtape/pretty";
-import { NatsService } from "@fbt/nats";
+import { marketContainer } from "./container.js";
 
-const name = "@fbt/market";
-const logger = getLogger(name);
+const { loggerBase: logger, service } = marketContainer.cradle;
 
 async function main() {
   await configure({
@@ -18,13 +17,13 @@ async function main() {
         lowestLevel: "warning",
         sinks: ["console"],
       },
-      { category: name, lowestLevel: "debug", sinks: ["console"] },
+      {
+        category: [service],
+        lowestLevel: "debug",
+        sinks: ["console"],
+      },
     ],
   });
-  logger.info("logging configured");
-
-  const nats = new NatsService(logger.getChild("nats"));
-  logger.info("nats created");
 
   // TODO start worker
 }

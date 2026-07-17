@@ -1,12 +1,9 @@
-import { getLogger, configure, getConsoleSink } from "@logtape/logtape";
+import { configure, getConsoleSink } from "@logtape/logtape";
 import { getPrettyFormatter } from "@logtape/pretty";
-import { NatsService } from "@fbt/nats";
-import { AccountsServiceClient } from "@fbt/accounts";
-import { WatchlistServiceClient } from "@fbt/watchlist";
 import { AccountId } from "@fbt/accounts/models";
+import { webContainer } from "./container.js";
 
-const name = "@fbt/web";
-const logger = getLogger([name]);
+const { loggerBase: logger, service } = webContainer.cradle;
 
 async function main() {
   await configure({
@@ -21,25 +18,15 @@ async function main() {
         lowestLevel: "warning",
         sinks: ["console"],
       },
-      { category: name, lowestLevel: "debug", sinks: ["console"] },
+      {
+        category: [service],
+        lowestLevel: "debug",
+        sinks: ["console"],
+      },
     ],
   });
-  logger.info("logging configured");
 
-  const nats = new NatsService(logger.getChild("nats"));
-  logger.info("nats created");
-
-  const accountsClient = new AccountsServiceClient(
-    logger.getChild("accounts"),
-    nats,
-  );
-  logger.info("accountsClient created");
-
-  const watchlistClient = new WatchlistServiceClient(
-    logger.getChild("watchlist"),
-    nats,
-  );
-  logger.info("watchlistClient created");
+  const { accountsClient, watchlistClient } = webContainer.cradle;
 
   // TODO wait for accounts service worker to be available
 
