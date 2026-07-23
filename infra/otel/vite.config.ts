@@ -12,6 +12,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(import.meta.dirname, "src/index.ts"),
+        instrumentation: resolve(import.meta.dirname, "src/instrumentation.ts"),
       },
       name: packageJson.name,
       fileName: (format, entry) => `${entry}.${format}`,

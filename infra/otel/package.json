@@ -1,5 +1,5 @@
 {
-  "name": "@fbt/observability",
+  "name": "@fbt/otel",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -7,16 +7,22 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./instrumentation": {
+      "types": "./dist/instrumentation.d.ts",
+      "import": "./dist/instrumentation.js"
     }
   },
   "dependencies": {
     "@fbt/typescript-config": "workspace:*",
     "@logtape/logtape": "^2.2.4",
     "@opentelemetry/api": "^1.9.1",
-    "@opentelemetry/context-async-hooks": "^2.9.0",
-    "@opentelemetry/core": "^2.9.0",
-    "@opentelemetry/sdk-metrics": "^2.9.0",
-    "@opentelemetry/sdk-node": "^0.220.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.78.0",
+    "@opentelemetry/context-async-hooks": "^2.10.0",
+    "@opentelemetry/core": "^2.10.0",
+    "@opentelemetry/sdk-metrics": "^2.10.0",
+    "@opentelemetry/sdk-node": "^0.221.0",
+    "@opentelemetry/sdk-trace-node": "^2.10.0",
     "awilix": "^13.0.5",
     "zod": "^4.4.3"
   },
@@ -25,7 +31,7 @@
     "vitest": "^4.1.10"
   },
   "scripts": {
-    "build": "",
+    "build": "vite build",
     "test": "vitest run",
     "test:watch": "vitest --watch"
   }

@@ -8,6 +8,7 @@
     "@fbt/logging": "workspace:*",
     "@fbt/market": "workspace:*",
     "@fbt/nats": "workspace:*",
+    "@fbt/otel": "workspace:*",
     "@fbt/typescript-config": "workspace:*",
     "@fbt/watchlist": "workspace:*",
     "@logtape/logtape": "^2.2.4",
@@ -22,7 +23,7 @@
   },
   "scripts": {
     "_build": "vite build",
-    "dev": "tsx src/dev.ts",
+    "dev": "tsx --env-file=.env.local --import=@fbt/otel/instrumentation src/dev.ts",
     "test": "vitest run",
     "test:watch": "vitest --watch"
   }

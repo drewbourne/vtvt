@@ -14,7 +14,7 @@
     "@fbt/logging": "workspace:*",
     "@fbt/market": "workspace:*",
     "@fbt/nats": "workspace:*",
-    "@fbt/observability": "workspace:*",
+    "@fbt/otel": "workspace:*",
     "@fbt/quest": "workspace:*",
     "@fbt/redis": "workspace:*",
     "@fbt/service": "workspace:*",
