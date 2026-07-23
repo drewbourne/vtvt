@@ -27,6 +27,7 @@
     "apps/*",
     "crons/*",
     "domains/*",
+    "integrations/*",
     "infra/*",
     "packages/*",
     "ui/*"

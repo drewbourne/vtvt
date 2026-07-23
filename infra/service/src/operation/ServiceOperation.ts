@@ -13,7 +13,7 @@ export type ServiceMethodName = z.output<typeof ServiceMethodName>;
 
 export type ServiceOperation<
   Method extends ServiceMethodName,
-  Params extends z.ZodType[],
+  Params extends z.ZodType,
   Result extends z.ZodType,
   Subject extends ServiceRpcSubject,
 > = {
@@ -27,7 +27,7 @@ export type ServiceOperation<
 
 export function serviceOperation<
   M extends ServiceMethodName,
-  P extends z.ZodType[],
+  P extends z.ZodType,
   R extends z.ZodType,
   S extends ServiceRpcSubject,
 >(definition: ServiceOperation<M, P, R, S>) {

@@ -27,6 +27,6 @@ export type ListAccountsResult = z.infer<typeof ListAccountsResult>;
 export const ListAccountsOperation = serviceOperation({
   method: "listAccounts",
   subject: "fbt.accounts.rpc.listAccounts",
-  params: [ListAccountsRequest],
+  params: ListAccountsRequest,
   result: ListAccountsResult,
 });

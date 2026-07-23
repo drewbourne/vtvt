@@ -11,6 +11,9 @@ import {
 import { WatchlistService } from "./service.js";
 import { WatchlistServiceWorker } from "./worker.js";
 import { registerLogger, injectLogger } from "@fbt/logging/awilix";
+import { registerQuest } from "@fbt/quest/awilix";
+import { registerRedis } from "@fbt/redis/awilix";
+import { RedisService } from "@fbt/redis";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -28,6 +31,8 @@ export const watchlistContainer = container.register({
   // dependencies
   ...registerLogger(),
   ...registerNats(),
+  ...registerQuest(),
+  ...registerRedis(),
 });
 
 export type WatchlistCradle = InferCradleFromContainer<

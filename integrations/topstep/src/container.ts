@@ -1,0 +1,57 @@
+import { registerNats } from "@fbt/nats/awilix";
+import { registerRedis } from "@fbt/redis/awilix";
+import { Logger } from "@logtape/logtape";
+import {
+  asClass,
+  asValue,
+  createContainer,
+  InferCradleFromContainer,
+  InjectionMode,
+} from "awilix";
+import { registerLogger, injectLogger } from "@fbt/logging/awilix";
+import { TopstepAccountsServiceWorker } from "./accounts/services/TopstepAccountsServiceWorker.js";
+import { TopstepCredentials } from "./auth/models/TopstepCredentials.js";
+import { TopstepAuthService } from "./auth/services/TopstepAuthService.js";
+import { TopstepAccountsService } from "./accounts/services/TopstepAccountsService.js";
+
+const container = createContainer({
+  injectionMode: InjectionMode.PROXY,
+  strict: true,
+});
+
+export const topstepContainer = container.register({
+  service: asValue("@fbt/topstep"),
+  version: asValue("0.0.1"),
+
+  // secrets
+  credentials: asValue(
+    TopstepCredentials.parse({
+      username: process.env.TOPSTEPX_USER_NAME,
+      apiKey: process.env.TOPSTEPX_API_KEY,
+    }),
+  ),
+
+  // services
+  authService: asClass(TopstepAuthService, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "authService" }),
+  }),
+  accountsService: asClass(TopstepAccountsService, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "accountsService" }),
+  }),
+
+  // dependencies
+  ...registerLogger(),
+  ...registerNats(),
+  ...registerRedis(),
+});
+
+export type TopstepCradle = InferCradleFromContainer<typeof topstepContainer>;
+
+export const topstepWorkerContainer = topstepContainer.createScope().register({
+  accountsWorker: asClass(TopstepAccountsServiceWorker, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "accountsWorker" }),
+  }),
+});

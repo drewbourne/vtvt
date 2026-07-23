@@ -16,7 +16,7 @@ export type RemoveSymbolFromWatchlistRequest = z.infer<
 
 export const RemoveSymbolFromWatchlistResult = z.discriminatedUnion("status", [
   z.object({ status: z.literal("success") }),
-  z.object({ status: z.literal("failure"), error: z.object() }),
+  z.object({ status: z.literal("failure"), error: z.unknown() }),
 ]);
 
 export type RemoveSymbolFromWatchlistResult = z.infer<
@@ -26,6 +26,6 @@ export type RemoveSymbolFromWatchlistResult = z.infer<
 export const RemoveSymbolFromWatchlistOperation = serviceOperation({
   method: "removeSymbolFromWatchlist",
   subject: "fbt.watchlist.rpc.removeSymbolFromWatchlist",
-  params: [RemoveSymbolFromWatchlistRequest],
+  params: RemoveSymbolFromWatchlistRequest,
   result: RemoveSymbolFromWatchlistResult,
 });

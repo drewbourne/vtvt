@@ -13,6 +13,7 @@ export default defineConfig({
       entry: {
         index: resolve(import.meta.dirname, "src/index.ts"),
         models: resolve(import.meta.dirname, "src/models.ts"),
+        operations: resolve(import.meta.dirname, "src/operations.ts"),
         service: resolve(import.meta.dirname, "src/service.ts"),
         worker: resolve(import.meta.dirname, "src/worker.ts"),
       },

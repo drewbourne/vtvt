@@ -1,0 +1,70 @@
+```
+domains/
+  accounts/
+    src/
+      services/
+        AccountsRepository
+  market/
+  trading/
+    src/
+        BrokerPort
+        TradingEventStorePort
+
+integrations/
+  topstep/
+    src/
+      accounts/
+        events/
+        models/
+        operations/
+        services/
+            TopstepAccountsService
+      auth/
+        events/
+        models/
+        operations/
+        services/
+            TopstepAuthService
+            TopstepSessionsService
+      config/
+        TopstepConfig
+            credentials
+      instruments/
+        events/
+        models/
+        operations/
+        services/
+            TopstepInstrumentsService
+      market/
+        events/
+        models/
+        operations/
+        services/
+            TopstepMarketLiveEventSource
+            TopstepMarketHistoryService
+      trading/
+        events/
+        models/
+        operations/
+        services/
+            TopstepBroker
+            TopstepTradingService
+            TopstepTradingEventSource
+    container
+        topstepContainer
+    dev
+        topstepWorker
+```
+
+# NATS subjects
+
+```
+fbt.accounts.rpc.listAccounts
+fbt.accounts.rpc.listAccountsForBroker
+
+fbt.broker.event.connected
+fbt.broker.event.disconnected
+
+fbt.topstep.event.connected
+fbt.topstep.event.disconnected
+```

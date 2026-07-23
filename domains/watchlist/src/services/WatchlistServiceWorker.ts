@@ -30,22 +30,15 @@ export class WatchlistServiceWorker {
     });
 
     for await (const operation of operations) {
-      this.nats.subscribe(operation.subject, {}, async (msg) => {
-        const data = msg.json();
-        const request = operation.params[0]?.parse(data);
+      this.nats.subscribeOperation(
+        operation,
+        {},
         // @ts-expect-error
-        const res = await this.watchlistService[operation.method](request);
-        const result = operation.result.parse(res);
-
-        this.logger.info("handler", {
-          subject: msg.subject,
-          headers: msg.headers,
-          request,
-          result,
-        });
-
-        msg.respond(JSON.stringify(result));
-      });
+        async (request) => {
+          // @ts-expect-error
+          return this.watchlistService[operation.method](request);
+        },
+      );
     }
   }
 }

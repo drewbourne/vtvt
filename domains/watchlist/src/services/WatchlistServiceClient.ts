@@ -26,13 +26,10 @@ export class WatchlistServiceClient {
   async getWatchlistForAccount(
     request: GetWatchlistForAccountRequest,
   ): Promise<GetWatchlistForAccountResult> {
-    const data = GetWatchlistForAccountRequest.parse(request);
-    const msg = JSON.stringify(data);
-    const res = await this.nats.request(
-      GetWatchlistForAccountOperation.subject,
-      msg,
+    const result = await this.nats.requestOperation(
+      request,
+      GetWatchlistForAccountOperation,
     );
-    const result = GetWatchlistForAccountResult.parse(res.json());
 
     this.logger.info("getWatchlistForAccount", { request, result });
 
@@ -42,13 +39,10 @@ export class WatchlistServiceClient {
   async addSymbolToWatchlist(
     request: AddSymbolToWatchlistRequest,
   ): Promise<AddSymbolToWatchlistResult> {
-    const data = AddSymbolToWatchlistRequest.parse(request);
-    const msg = JSON.stringify(data);
-    const res = await this.nats.request(
-      AddSymbolToWatchlistOperation.subject,
-      msg,
+    const result = await this.nats.requestOperation(
+      request,
+      AddSymbolToWatchlistOperation,
     );
-    const result = AddSymbolToWatchlistResult.parse(res.json());
 
     this.logger.info("addSymbolToWatchlist", { request, result });
 
@@ -58,13 +52,10 @@ export class WatchlistServiceClient {
   async removeSymbolFromWatchlist(
     request: RemoveSymbolFromWatchlistRequest,
   ): Promise<RemoveSymbolFromWatchlistResult> {
-    const data = RemoveSymbolFromWatchlistRequest.parse(request);
-    const msg = JSON.stringify(data);
-    const res = await this.nats.request(
-      RemoveSymbolFromWatchlistOperation.subject,
-      msg,
+    const result = await this.nats.requestOperation(
+      request,
+      RemoveSymbolFromWatchlistOperation,
     );
-    const result = RemoveSymbolFromWatchlistResult.parse(res.json());
 
     this.logger.info("removeSymbolFromWatchlist", { request, result });
 

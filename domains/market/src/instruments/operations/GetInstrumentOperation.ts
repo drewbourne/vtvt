@@ -25,6 +25,6 @@ export type GetInstrumentResult = z.infer<typeof GetInstrumentResult>;
 export const GetInstrumentOperation = serviceOperation({
   method: "getInstrument",
   subject: "fbt.market.rpc.getInstrument",
-  params: [GetInstrumentRequest],
+  params: GetInstrumentRequest,
   result: GetInstrumentResult,
 });

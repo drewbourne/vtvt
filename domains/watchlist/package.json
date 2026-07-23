@@ -22,6 +22,8 @@
     "@fbt/market": "workspace:*",
     "@fbt/nats": "workspace:*",
     "@fbt/observability": "workspace:*",
+    "@fbt/quest": "workspace:*",
+    "@fbt/redis": "workspace:*",
     "@fbt/service": "workspace:*",
     "@fbt/typescript-config": "workspace:*",
     "@logtape/logtape": "^2.2.4",

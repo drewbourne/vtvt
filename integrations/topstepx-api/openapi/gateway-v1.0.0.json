@@ -1,0 +1,2335 @@
+{
+    "openapi": "3.0.0",
+    "x-generator": "NSwag v14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))",
+    "info": {
+        "title": "ProjectX Gateway API",
+        "description": "ProjectX Gateway API Documentation and specification.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/Account/search": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Searches for accounts based on the provided request.",
+                "operationId": "Account_SearchAccounts",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchAccountRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchAccountRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchAccountRequest"
+                            }
+                        }
+                    },
+                    "description": "The request containing search criteria.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "The search account response.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchAccountResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchAccountResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchAccountResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Auth/loginApp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login as the specified user using the specified application.",
+                "operationId": "Auth_LoginApp",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginAppRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginAppRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginAppRequest"
+                            }
+                        }
+                    },
+                    "description": "The login request.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Auth/loginKey": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login as the specified user using the specified API key.",
+                "operationId": "Auth_LoginKey",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginApiKeyRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginApiKeyRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginApiKeyRequest"
+                            }
+                        }
+                    },
+                    "description": "The login request.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logs out the current authenticated user.",
+                "operationId": "Auth_Logout",
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogoutResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogoutResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LogoutResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Auth/validate": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Validates the current user's session.",
+                "operationId": "Auth_Validate",
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidateResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidateResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidateResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Contract/search": {
+            "post": {
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Searches for contracts based on the provided search criteria.",
+                "operationId": "Contract_SearchContracts",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchContractRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchContractRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchContractRequest"
+                            }
+                        }
+                    },
+                    "description": "The search criteria for finding contracts.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response containing the search results, including any matching contracts.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchContractResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchContractResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchContractResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Contract/searchById": {
+            "post": {
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Searches for a contract by its ID.",
+                "operationId": "Contract_SearchContractById",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchContractByIdRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchContractByIdRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchContractByIdRequest"
+                            }
+                        }
+                    },
+                    "description": "The request containing the contract ID.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response containing the search result, including the matching contract if found.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchContractByIdResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchContractByIdResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchContractByIdResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Contract/available": {
+            "post": {
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Lists available contracts based on the provided request parameters.",
+                "operationId": "Contract_AvailableContracts",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListAvailableContractRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListAvailableContractRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ListAvailableContractRequest"
+                            }
+                        }
+                    },
+                    "description": "The listing criteria for available contracts.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response containing the list of available contracts.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListAvailableContractResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListAvailableContractResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListAvailableContractResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/History/retrieveBars": {
+            "post": {
+                "tags": [
+                    "History"
+                ],
+                "summary": "Retrieves historical bars based on the specified request parameters.",
+                "operationId": "History_GetBars",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RetrieveBarRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RetrieveBarRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RetrieveBarRequest"
+                            }
+                        }
+                    },
+                    "description": "The request containing parameters for retrieving historical bars.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "The response with the retrieved bars.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetrieveBarResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetrieveBarResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RetrieveBarResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Order/search": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Searches for orders based on the provided request.",
+                "operationId": "Order_SearchOrders",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchOrderRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchOrderRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchOrderRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing search criteria.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with search results.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchOrderResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchOrderResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Order/searchOpen": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Searches for open (working/active) orders based on the provided request.",
+                "operationId": "Order_SearchOpenOrders",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchOpenOrderRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchOpenOrderRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchOpenOrderRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing search criteria.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with search results.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchOrderResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchOrderResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Order/place": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Places a new order based on the provided request.",
+                "operationId": "Order_PlaceOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlaceOrderRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlaceOrderRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlaceOrderRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing order details.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with order placement details.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PlaceOrderResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PlaceOrderResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PlaceOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Order/cancel": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Cancels an existing order based on the provided request.",
+                "operationId": "Order_CancelOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelOrderRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelOrderRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelOrderRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing order cancellation details.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with order cancellation details.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CancelOrderResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CancelOrderResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CancelOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Order/modify": {
+            "post": {
+                "tags": [
+                    "Order"
+                ],
+                "summary": "Modifies an existing order based on the provided request.",
+                "operationId": "Order_ModifyOrder",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ModifyOrderRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ModifyOrderRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ModifyOrderRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing order modification details.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with order modification details.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModifyOrderResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModifyOrderResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ModifyOrderResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Position/searchOpen": {
+            "post": {
+                "tags": [
+                    "Position"
+                ],
+                "summary": "Searches for open positions based on the provided request.",
+                "operationId": "Position_SearchOpenPositions",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchPositionRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchPositionRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchPositionRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing search criteria.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with search results.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchPositionResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchPositionResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchPositionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Position/closeContract": {
+            "post": {
+                "tags": [
+                    "Position"
+                ],
+                "summary": "Closes a contract position based on the provided request.",
+                "operationId": "Position_CloseContractPosition",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CloseContractPositionRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CloseContractPositionRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CloseContractPositionRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing the account ID and contract ID to close.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response indicating the success or failure of the close operation.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClosePositionResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClosePositionResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClosePositionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Position/partialCloseContract": {
+            "post": {
+                "tags": [
+                    "Position"
+                ],
+                "summary": "Partially closes a contract position based on the provided request.",
+                "operationId": "Position_PartialCloseContractPosition",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PartialCloseContractPositionRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PartialCloseContractPositionRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PartialCloseContractPositionRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing the account ID, contract ID, and size to close.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response indicating the success or failure of the partial close operation.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PartialClosePositionResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PartialClosePositionResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PartialClosePositionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Status/ping": {
+            "get": {
+                "tags": [
+                    "Status"
+                ],
+                "summary": "Handles the ping request to check the status of the API.",
+                "operationId": "Status_Ping",
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "Returns a \"pong\" to indicate the API is responsive.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Trade/search": {
+            "post": {
+                "tags": [
+                    "Trade"
+                ],
+                "summary": "Searches for half-turn trades based on the provided request parameters.",
+                "operationId": "Trade_SearchHalfTurnTrades",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchTradeRequest"
+                            }
+                        },
+                        "text/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchTradeRequest"
+                            }
+                        },
+                        "application/*+json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SearchTradeRequest"
+                            }
+                        }
+                    },
+                    "description": "A request containing search criteria.",
+                    "required": true,
+                    "x-nullable": false
+                },
+                "responses": {
+                    "200": {
+                        "x-nullable": false,
+                        "description": "A response with the search results.",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchHalfTradeResponse"
+                                }
+                            },
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchHalfTradeResponse"
+                                }
+                            },
+                            "text/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SearchHalfTradeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "servers": [
+        {
+            "url": "https://api.topstepx.com"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "SearchAccountResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/SearchAccountErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "accounts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TradingAccountModel"
+                        }
+                    }
+                }
+            },
+            "SearchAccountErrorCode": {
+                "type": "integer",
+                "description": "0 = Success",
+                "x-enumNames": [
+                    "Success"
+                ],
+                "enum": [
+                    0
+                ]
+            },
+            "TradingAccountModel": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "balance",
+                    "canTrade",
+                    "isVisible",
+                    "simulated"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "balance": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "canTrade": {
+                        "type": "boolean"
+                    },
+                    "isVisible": {
+                        "type": "boolean"
+                    },
+                    "simulated": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "SearchAccountRequest": {
+                "type": "object",
+                "required": [
+                    "onlyActiveAccounts"
+                ],
+                "properties": {
+                    "onlyActiveAccounts": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/LoginErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "token": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = UserNotFound\n2 = PasswordVerificationFailed\n3 = InvalidCredentials\n4 = AppNotFound\n5 = AppVerificationFailed\n6 = InvalidDevice\n7 = AgreementsNotSigned\n8 = UnknownError\n9 = ApiSubscriptionNotFound\n10 = ApiKeyAuthenticationDisabled",
+                "x-enumNames": [
+                    "Success",
+                    "UserNotFound",
+                    "PasswordVerificationFailed",
+                    "InvalidCredentials",
+                    "AppNotFound",
+                    "AppVerificationFailed",
+                    "InvalidDevice",
+                    "AgreementsNotSigned",
+                    "UnknownError",
+                    "ApiSubscriptionNotFound",
+                    "ApiKeyAuthenticationDisabled"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10
+                ]
+            },
+            "LoginAppRequest": {
+                "type": "object",
+                "required": [
+                    "userName",
+                    "password",
+                    "deviceId",
+                    "appId",
+                    "verifyKey"
+                ],
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "deviceId": {
+                        "type": "string"
+                    },
+                    "appId": {
+                        "type": "string"
+                    },
+                    "verifyKey": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LoginApiKeyRequest": {
+                "type": "object",
+                "required": [
+                    "userName",
+                    "apiKey"
+                ],
+                "properties": {
+                    "userName": {
+                        "type": "string"
+                    },
+                    "apiKey": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LogoutResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/LogoutErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    }
+                }
+            },
+            "LogoutErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = InvalidSession\n2 = UnknownError",
+                "x-enumNames": [
+                    "Success",
+                    "InvalidSession",
+                    "UnknownError"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2
+                ]
+            },
+            "ValidateResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/ValidateErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "newToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ValidateErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = InvalidSession\n2 = SessionNotFound\n3 = ExpiredToken\n4 = UnknownError",
+                "x-enumNames": [
+                    "Success",
+                    "InvalidSession",
+                    "SessionNotFound",
+                    "ExpiredToken",
+                    "UnknownError"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4
+                ]
+            },
+            "SearchContractResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/SearchContractErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "contracts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContractModel"
+                        }
+                    }
+                }
+            },
+            "SearchContractErrorCode": {
+                "type": "integer",
+                "description": "0 = Success",
+                "x-enumNames": [
+                    "Success"
+                ],
+                "enum": [
+                    0
+                ]
+            },
+            "ContractModel": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "description",
+                    "tickSize",
+                    "tickValue",
+                    "activeContract",
+                    "symbolId"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "tickSize": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "tickValue": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "activeContract": {
+                        "type": "boolean"
+                    },
+                    "symbolId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SearchContractRequest": {
+                "type": "object",
+                "required": [
+                    "live"
+                ],
+                "properties": {
+                    "searchText": {
+                        "type": "string"
+                    },
+                    "live": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "SearchContractByIdResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/SearchContractByIdErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "contract": {
+                        "$ref": "#/components/schemas/ContractModel"
+                    }
+                }
+            },
+            "SearchContractByIdErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = ContractNotFound",
+                "x-enumNames": [
+                    "Success",
+                    "ContractNotFound"
+                ],
+                "enum": [
+                    0,
+                    1
+                ]
+            },
+            "SearchContractByIdRequest": {
+                "type": "object",
+                "required": [
+                    "contractId"
+                ],
+                "properties": {
+                    "contractId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ListAvailableContractResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/ListAvailableContractErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "contracts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ContractModel"
+                        }
+                    }
+                }
+            },
+            "ListAvailableContractErrorCode": {
+                "type": "integer",
+                "description": "0 = Success",
+                "x-enumNames": [
+                    "Success"
+                ],
+                "enum": [
+                    0
+                ]
+            },
+            "ListAvailableContractRequest": {
+                "type": "object",
+                "required": [
+                    "live"
+                ],
+                "properties": {
+                    "live": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "RetrieveBarResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/RetrieveBarErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "bars": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AggregateBarModel"
+                        }
+                    }
+                }
+            },
+            "RetrieveBarErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = ContractNotFound\n2 = UnitInvalid\n3 = UnitNumberInvalid\n4 = LimitInvalid",
+                "x-enumNames": [
+                    "Success",
+                    "ContractNotFound",
+                    "UnitInvalid",
+                    "UnitNumberInvalid",
+                    "LimitInvalid"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4
+                ]
+            },
+            "AggregateBarModel": {
+                "type": "object",
+                "required": [
+                    "t",
+                    "o",
+                    "h",
+                    "l",
+                    "c",
+                    "v"
+                ],
+                "properties": {
+                    "t": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "o": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "h": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "l": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "c": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "v": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "RetrieveBarRequest": {
+                "type": "object",
+                "required": [
+                    "contractId",
+                    "live",
+                    "startTime",
+                    "endTime",
+                    "unit",
+                    "unitNumber",
+                    "limit",
+                    "includePartialBar"
+                ],
+                "properties": {
+                    "contractId": {
+                        "type": "string"
+                    },
+                    "live": {
+                        "type": "boolean"
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "endTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "unit": {
+                        "$ref": "#/components/schemas/AggregateBarUnit"
+                    },
+                    "unitNumber": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "includePartialBar": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "AggregateBarUnit": {
+                "type": "integer",
+                "description": "0 = Unspecified\n1 = Second\n2 = Minute\n3 = Hour\n4 = Day\n5 = Week\n6 = Month",
+                "x-enumNames": [
+                    "Unspecified",
+                    "Second",
+                    "Minute",
+                    "Hour",
+                    "Day",
+                    "Week",
+                    "Month"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ]
+            },
+            "SearchOrderResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/SearchOrderErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "orders": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderModel"
+                        }
+                    }
+                }
+            },
+            "SearchOrderErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound"
+                ],
+                "enum": [
+                    0,
+                    1
+                ]
+            },
+            "OrderModel": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "accountId",
+                    "contractId",
+                    "symbolId",
+                    "creationTimestamp",
+                    "status",
+                    "type",
+                    "side",
+                    "size",
+                    "fillVolume"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "contractId": {
+                        "type": "string"
+                    },
+                    "symbolId": {
+                        "type": "string"
+                    },
+                    "creationTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updateTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "status": {
+                        "$ref": "#/components/schemas/OrderStatus"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/OrderType"
+                    },
+                    "side": {
+                        "$ref": "#/components/schemas/OrderSide"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "limitPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "stopPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "fillVolume": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "filledPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "customTag": {
+                        "type": "string"
+                    }
+                }
+            },
+            "OrderStatus": {
+                "type": "integer",
+                "description": "0 = None\n1 = Open\n2 = Filled\n3 = Cancelled\n4 = Expired\n5 = Rejected\n6 = Pending\n7 = PendingCancellation\n8 = Suspended",
+                "x-enumNames": [
+                    "None",
+                    "Open",
+                    "Filled",
+                    "Cancelled",
+                    "Expired",
+                    "Rejected",
+                    "Pending",
+                    "PendingCancellation",
+                    "Suspended"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8
+                ]
+            },
+            "OrderType": {
+                "type": "integer",
+                "description": "0 = Unknown\n1 = Limit\n2 = Market\n3 = StopLimit\n4 = Stop\n5 = TrailingStop\n6 = JoinBid\n7 = JoinAsk",
+                "x-enumNames": [
+                    "Unknown",
+                    "Limit",
+                    "Market",
+                    "StopLimit",
+                    "Stop",
+                    "TrailingStop",
+                    "JoinBid",
+                    "JoinAsk"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7
+                ]
+            },
+            "OrderSide": {
+                "type": "integer",
+                "description": "0 = Bid\n1 = Ask",
+                "x-enumNames": [
+                    "Bid",
+                    "Ask"
+                ],
+                "enum": [
+                    0,
+                    1
+                ]
+            },
+            "SearchOrderRequest": {
+                "type": "object",
+                "required": [
+                    "accountId",
+                    "startTimestamp"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "startTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "endTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "SearchOpenOrderRequest": {
+                "type": "object",
+                "required": [
+                    "accountId"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "PlaceOrderResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/PlaceOrderErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "PlaceOrderErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound\n2 = OrderRejected\n3 = InsufficientFunds\n4 = AccountViolation\n5 = OutsideTradingHours\n6 = OrderPending\n7 = UnknownError\n8 = ContractNotFound\n9 = ContractNotActive\n10 = AccountRejected",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound",
+                    "OrderRejected",
+                    "InsufficientFunds",
+                    "AccountViolation",
+                    "OutsideTradingHours",
+                    "OrderPending",
+                    "UnknownError",
+                    "ContractNotFound",
+                    "ContractNotActive",
+                    "AccountRejected"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10
+                ]
+            },
+            "PlaceOrderRequest": {
+                "type": "object",
+                "required": [
+                    "accountId",
+                    "contractId",
+                    "type",
+                    "side",
+                    "size"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "contractId": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/OrderType"
+                    },
+                    "side": {
+                        "$ref": "#/components/schemas/OrderSide"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "limitPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "stopPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "trailPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "customTag": {
+                        "type": "string"
+                    },
+                    "stopLossBracket": {
+                        "$ref": "#/components/schemas/PlaceOrderBracket"
+                    },
+                    "takeProfitBracket": {
+                        "$ref": "#/components/schemas/PlaceOrderBracket"
+                    }
+                }
+            },
+            "PlaceOrderBracket": {
+                "type": "object",
+                "required": [
+                    "ticks",
+                    "type"
+                ],
+                "properties": {
+                    "ticks": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/OrderType"
+                    }
+                }
+            },
+            "CancelOrderResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/CancelOrderErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CancelOrderErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound\n2 = OrderNotFound\n3 = Rejected\n4 = Pending\n5 = UnknownError\n6 = AccountRejected",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound",
+                    "OrderNotFound",
+                    "Rejected",
+                    "Pending",
+                    "UnknownError",
+                    "AccountRejected"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ]
+            },
+            "CancelOrderRequest": {
+                "type": "object",
+                "required": [
+                    "accountId",
+                    "orderId"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "ModifyOrderResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/ModifyOrderErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ModifyOrderErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound\n2 = OrderNotFound\n3 = Rejected\n4 = Pending\n5 = UnknownError\n6 = AccountRejected\n7 = ContractNotFound",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound",
+                    "OrderNotFound",
+                    "Rejected",
+                    "Pending",
+                    "UnknownError",
+                    "AccountRejected",
+                    "ContractNotFound"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7
+                ]
+            },
+            "ModifyOrderRequest": {
+                "type": "object",
+                "required": [
+                    "accountId",
+                    "orderId"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "limitPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "stopPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "trailPrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    }
+                }
+            },
+            "SearchPositionResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/SearchPositionErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "positions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PositionModel"
+                        }
+                    }
+                }
+            },
+            "SearchPositionErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound"
+                ],
+                "enum": [
+                    0,
+                    1
+                ]
+            },
+            "PositionModel": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "accountId",
+                    "contractId",
+                    "creationTimestamp",
+                    "type",
+                    "size",
+                    "averagePrice"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "contractId": {
+                        "type": "string"
+                    },
+                    "creationTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/PositionType"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "averagePrice": {
+                        "type": "number",
+                        "format": "decimal"
+                    }
+                }
+            },
+            "PositionType": {
+                "type": "integer",
+                "description": "0 = Undefined\n1 = Long\n2 = Short",
+                "x-enumNames": [
+                    "Undefined",
+                    "Long",
+                    "Short"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2
+                ]
+            },
+            "SearchPositionRequest": {
+                "type": "object",
+                "required": [
+                    "accountId"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "ClosePositionResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/ClosePositionErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ClosePositionErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound\n2 = PositionNotFound\n3 = ContractNotFound\n4 = ContractNotActive\n5 = OrderRejected\n6 = OrderPending\n7 = UnknownError\n8 = AccountRejected",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound",
+                    "PositionNotFound",
+                    "ContractNotFound",
+                    "ContractNotActive",
+                    "OrderRejected",
+                    "OrderPending",
+                    "UnknownError",
+                    "AccountRejected"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8
+                ]
+            },
+            "CloseContractPositionRequest": {
+                "type": "object",
+                "required": [
+                    "accountId",
+                    "contractId"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "contractId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PartialClosePositionResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/PartialClosePositionErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PartialClosePositionErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound\n2 = PositionNotFound\n3 = ContractNotFound\n4 = ContractNotActive\n5 = InvalidCloseSize\n6 = OrderRejected\n7 = OrderPending\n8 = UnknownError\n9 = AccountRejected",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound",
+                    "PositionNotFound",
+                    "ContractNotFound",
+                    "ContractNotActive",
+                    "InvalidCloseSize",
+                    "OrderRejected",
+                    "OrderPending",
+                    "UnknownError",
+                    "AccountRejected"
+                ],
+                "enum": [
+                    0,
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9
+                ]
+            },
+            "PartialCloseContractPositionRequest": {
+                "type": "object",
+                "required": [
+                    "accountId",
+                    "contractId",
+                    "size"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "contractId": {
+                        "type": "string"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "SearchHalfTradeResponse": {
+                "type": "object",
+                "required": [
+                    "success",
+                    "errorCode"
+                ],
+                "properties": {
+                    "success": {
+                        "type": "boolean"
+                    },
+                    "errorCode": {
+                        "$ref": "#/components/schemas/SearchTradeErrorCode"
+                    },
+                    "errorMessage": {
+                        "type": "string"
+                    },
+                    "trades": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HalfTradeModel"
+                        }
+                    }
+                }
+            },
+            "SearchTradeErrorCode": {
+                "type": "integer",
+                "description": "0 = Success\n1 = AccountNotFound",
+                "x-enumNames": [
+                    "Success",
+                    "AccountNotFound"
+                ],
+                "enum": [
+                    0,
+                    1
+                ]
+            },
+            "HalfTradeModel": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "accountId",
+                    "contractId",
+                    "creationTimestamp",
+                    "price",
+                    "fees",
+                    "side",
+                    "size",
+                    "voided",
+                    "orderId"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "contractId": {
+                        "type": "string"
+                    },
+                    "creationTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "profitAndLoss": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "fees": {
+                        "type": "number",
+                        "format": "decimal"
+                    },
+                    "side": {
+                        "$ref": "#/components/schemas/OrderSide"
+                    },
+                    "size": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "voided": {
+                        "type": "boolean"
+                    },
+                    "orderId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "SearchTradeRequest": {
+                "type": "object",
+                "required": [
+                    "accountId"
+                ],
+                "properties": {
+                    "accountId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "startTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "endTimestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        }
+    }
+}

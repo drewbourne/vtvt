@@ -59,6 +59,6 @@ export type ListInstrumentsResult = z.infer<typeof ListInstrumentsResult>;
 export const ListInstrumentsOperation = serviceOperation({
   method: "listInstruments",
   subject: "fbt.market.rpc.listInstruments",
-  params: [ListInstrumentsRequest],
+  params: ListInstrumentsRequest,
   result: ListInstrumentsResult,
 });

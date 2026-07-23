@@ -3,7 +3,16 @@ import { AccountsService } from "./AccountsService.js";
 import { Logger } from "@logtape/logtape";
 import { ListAccountsOperation } from "../operations/ListAccountsOperation.js";
 
-const operations = [ListAccountsOperation];
+const operations = [
+  // service operations
+  ListAccountsOperation,
+
+  // introspection
+  // - methodz
+  // observability
+  // - healthz
+  // - metricz
+];
 
 export class AccountsServiceWorker {
   constructor(
@@ -24,22 +33,15 @@ export class AccountsServiceWorker {
     });
 
     for await (const operation of operations) {
-      this.nats.subscribe(operation.subject, {}, async (msg) => {
-        const data = msg.json();
-        const request = operation.params[0]?.parse(data);
+      this.nats.subscribeOperation(
+        operation,
+        {},
         // @ts-expect-error
-        const res = await this.accountsService[operation.method](request);
-        const result = operation.result.parse(res);
-
-        this.logger.info("handler", {
-          subject: msg.subject,
-          headers: msg.headers,
-          request,
-          result,
-        });
-
-        msg.respond(JSON.stringify(result));
-      });
+        async (request) => {
+          // @ts-expect-error
+          return this.accountsService[operation.method](request);
+        },
+      );
     }
   }
 }

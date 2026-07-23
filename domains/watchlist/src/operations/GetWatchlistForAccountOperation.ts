@@ -11,11 +11,18 @@ export type GetWatchlistForAccountRequest = z.infer<
   typeof GetWatchlistForAccountRequest
 >;
 
-export const GetWatchlistForAccountResult = z.object({
-  total: z.number(),
-  count: z.number(),
-  items: z.array(Watchlist),
-});
+export const GetWatchlistForAccountResult = z.discriminatedUnion("status", [
+  z.object({
+    status: z.literal("success"),
+    total: z.number(),
+    count: z.number(),
+    items: z.array(Watchlist),
+  }),
+  z.object({
+    status: z.literal("failure"),
+    error: z.unknown(),
+  }),
+]);
 
 export type GetWatchlistForAccountResult = z.infer<
   typeof GetWatchlistForAccountResult
@@ -24,6 +31,6 @@ export type GetWatchlistForAccountResult = z.infer<
 export const GetWatchlistForAccountOperation = serviceOperation({
   method: "getWatchlistForAccount",
   subject: "fbt.watchlist.rpc.getWatchlistForAccount",
-  params: [GetWatchlistForAccountRequest],
+  params: GetWatchlistForAccountRequest,
   result: GetWatchlistForAccountResult,
 });

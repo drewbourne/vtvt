@@ -15,12 +15,12 @@ export class AccountsServiceClient {
   async listAccounts(
     request: ListAccountsRequest,
   ): Promise<ListAccountsResult> {
-    const data = ListAccountsRequest.parse(request);
-    const msg = JSON.stringify(data);
-    const res = await this.nats.request(ListAccountsOperation.subject, msg);
-    const result = ListAccountsResult.parse(res.json());
-
+    const result = await this.nats.requestOperation(
+      request,
+      ListAccountsOperation,
+    );
     this.logger.info("listAccounts", { request, result });
+
     return result;
   }
 }

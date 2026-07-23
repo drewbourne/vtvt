@@ -60,7 +60,7 @@ export type ListAccountsResult = z.infer<typeof ListAccountsResult>;
 export const listAccountsOperation = operation({
   method: "listAccounts",
   subject: "fbt.accounts.rpc.listAccounts",
-  params: [ListAccountsRequest],
+  params: ListAccountsRequest,
   result: ListAccountsResult,
 });
 ```

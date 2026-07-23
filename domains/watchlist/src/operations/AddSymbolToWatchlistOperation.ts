@@ -16,7 +16,7 @@ export type AddSymbolToWatchlistRequest = z.infer<
 
 export const AddSymbolToWatchlistResult = z.discriminatedUnion("status", [
   z.object({ status: z.literal("success") }),
-  z.object({ status: z.literal("failure"), error: z.object() }),
+  z.object({ status: z.literal("failure"), error: z.unknown() }),
 ]);
 
 export type AddSymbolToWatchlistResult = z.infer<
@@ -26,6 +26,6 @@ export type AddSymbolToWatchlistResult = z.infer<
 export const AddSymbolToWatchlistOperation = serviceOperation({
   method: "addSymbolToWatchlist",
   subject: "fbt.watchlist.rpc.addSymbolToWatchlist",
-  params: [AddSymbolToWatchlistRequest],
+  params: AddSymbolToWatchlistRequest,
   result: AddSymbolToWatchlistResult,
 });

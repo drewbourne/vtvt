@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@fbt/logging": "workspace:*",
+    "@fbt/service": "workspace:*",
     "@logtape/logtape": "^2.2.4",
     "@nats-io/nats-core": "^3.4.0",
     "@nats-io/transport-node": "^3.4.0",
