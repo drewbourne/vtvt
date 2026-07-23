@@ -32,6 +32,10 @@ async function main() {
   logger.info("accountsWorker started");
 
   // instruments
+  const { instrumentsWorker } = topstepWorkerContainer.cradle;
+  logger.info("instrumentsWorker starting");
+  await instrumentsWorker.start();
+  logger.info("instrumentsWorker started");
 
   // market
 

@@ -7,7 +7,7 @@ import {
 import { TradingAccountModel } from "@fbt/topstepx-api/gateway";
 
 export function toAccount(topstepAccount: TradingAccountModel): Account {
-  return {
+  return Account.parse({
     id: AccountId.parse(`account:topstep:${topstepAccount.id}`),
     brokerId: BrokerId.parse("topstep"),
     brokerAccountId: BrokerAccountId.parse(topstepAccount.id),
@@ -16,5 +16,5 @@ export function toAccount(topstepAccount: TradingAccountModel): Account {
     canTrade: topstepAccount.canTrade,
     isVisble: topstepAccount.isVisible,
     // env: 'sim' | 'live',
-  };
+  });
 }

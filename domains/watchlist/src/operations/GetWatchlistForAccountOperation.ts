@@ -14,7 +14,6 @@ export type GetWatchlistForAccountRequest = z.infer<
 export const GetWatchlistForAccountResult = z.discriminatedUnion("status", [
   z.object({
     status: z.literal("success"),
-    total: z.number(),
     count: z.number(),
     items: z.array(Watchlist),
   }),

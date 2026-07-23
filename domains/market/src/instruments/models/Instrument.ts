@@ -5,7 +5,7 @@ import { InstrumentId } from "./InstrumentId.js";
 
 const Base = z.object({
   id: InstrumentId,
-  broker: BrokerId,
+  brokerId: BrokerId,
   brokerSymbolId: BrokerSymbolId,
 
   /** `MNQ` */
@@ -16,6 +16,9 @@ const Base = z.object({
 
   /** `Micro E-mini Nasdaq-100: March 2026`  */
   description: z.string(),
+
+  /** Environment: 'live' | 'sim' */
+  environment: z.enum(["live", "sim"]),
 });
 
 const Crypto = z.object({
@@ -50,5 +53,7 @@ export const Instrument = z.discriminatedUnion("instrumentType", [
 ]);
 
 export type Instrument = z.infer<typeof Instrument>;
+
+export const InstrumentType = z.enum(["crypto", "forex", "future", "stock"]);
 
 export type InstrumentType = Instrument["instrumentType"];

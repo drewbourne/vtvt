@@ -13,6 +13,8 @@ import { TopstepAccountsServiceWorker } from "./accounts/services/TopstepAccount
 import { TopstepCredentials } from "./auth/models/TopstepCredentials.js";
 import { TopstepAuthService } from "./auth/services/TopstepAuthService.js";
 import { TopstepAccountsService } from "./accounts/services/TopstepAccountsService.js";
+import { TopstepInstrumentsServiceWorker } from "./instruments/services/TopstepInstrumentsServiceWorker.js";
+import { TopstepInstrumentsService } from "./instruments/services/TopstepInstrumentsService.js";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -34,11 +36,15 @@ export const topstepContainer = container.register({
   // services
   authService: asClass(TopstepAuthService, {
     injectionMode: InjectionMode.CLASSIC,
-    injector: injectLogger({ name: "authService" }),
+    injector: injectLogger({ name: "auth" }),
   }),
   accountsService: asClass(TopstepAccountsService, {
     injectionMode: InjectionMode.CLASSIC,
-    injector: injectLogger({ name: "accountsService" }),
+    injector: injectLogger({ name: "accounts" }),
+  }),
+  instrumentsService: asClass(TopstepInstrumentsService, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "instruments" }),
   }),
 
   // dependencies
@@ -53,5 +59,9 @@ export const topstepWorkerContainer = topstepContainer.createScope().register({
   accountsWorker: asClass(TopstepAccountsServiceWorker, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "accountsWorker" }),
+  }),
+  instrumentsWorker: asClass(TopstepInstrumentsServiceWorker, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "instrumentsWorker" }),
   }),
 });

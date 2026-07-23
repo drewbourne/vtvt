@@ -49,7 +49,6 @@ export const ListAccountsRequest = z.object({
 });
 
 export const ListAccountsResult = z.object({
-  total: z.number(),
   count: z.number(),
   accounts: z.array(z.object({ name: z.string(), balance: z.number() })),
 });

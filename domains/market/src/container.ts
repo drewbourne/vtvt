@@ -10,6 +10,8 @@ import {
 } from "awilix";
 import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { MarketWorker } from "./worker.js";
+import { InstrumentsService } from "./instruments/services/InstrumentsService.js";
+import { InstrumentsServiceWorker } from "./instruments/services/InstrumentsServiceWorker.js";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -19,6 +21,11 @@ const container = createContainer({
 export const marketContainer = container.register({
   service: asValue("@fbt/market"),
   version: asValue("0.0.1"),
+
+  instrumentsService: asClass(InstrumentsService, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "instruments" }),
+  }),
 
   // dependencies
   ...registerLogger(),
@@ -30,6 +37,10 @@ export type MarketCradle = InferCradleFromContainer<typeof marketContainer>;
 export const marketWorkerContainer = marketContainer.createScope().register({
   marketWorker: asClass(MarketWorker, {
     injectionMode: InjectionMode.CLASSIC,
-    injector: injectLogger({ name: "worker" }),
+    injector: injectLogger({ name: "marketWorker" }),
+  }),
+  instrumentsWorker: asClass(InstrumentsServiceWorker, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "instrumentsWorker" }),
   }),
 });

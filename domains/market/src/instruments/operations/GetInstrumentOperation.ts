@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { InstrumentId } from "../models/InstrumentId.js";
 import { Instrument } from "../models/Instrument.js";
 import { serviceOperation } from "@fbt/service";
+import { InstrumentId } from "../models/InstrumentId.js";
 
 export const GetInstrumentRequest = z.object({
   id: InstrumentId,

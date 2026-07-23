@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { serviceOperation } from "@fbt/service";
 import { Account } from "../models/Account.js";
-import { BrokerId } from "../models.js";
+import { BrokerId } from "../models/BrokerId.js";
 
 export const ListAccountsForBrokerRequest = z.object({
   brokers: z.array(BrokerId).optional(),
@@ -12,10 +12,8 @@ export type ListAccountsForBrokerRequest = z.infer<
 >;
 
 export const ListAccountsForBrokerResult = z.object({
-  total: z.number(),
   count: z.number(),
   items: z.array(Account),
-
   broker: BrokerId,
 });
 

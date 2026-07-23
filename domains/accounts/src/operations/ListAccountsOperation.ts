@@ -12,7 +12,6 @@ export const ListAccountsRequest = z.object({
 export type ListAccountsRequest = z.infer<typeof ListAccountsRequest>;
 
 export const ListAccountsResult = z.object({
-  total: z.number(),
   count: z.number(),
   items: z.array(Account),
 });

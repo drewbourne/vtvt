@@ -1,11 +1,15 @@
 import { NatsService } from "@fbt/nats";
-import { AccountsService } from "./AccountsService.js";
+import { InstrumentsService } from "./InstrumentsService.js";
 import { Logger } from "@logtape/logtape";
-import { ListAccountsOperation } from "../operations/ListAccountsOperation.js";
+import { ListInstrumentsOperation } from "../operations/ListInstrumentsOperation.js";
+import { GetInstrumentOperation } from "../operations/GetInstrumentOperation.js";
+import { GetInstrumentForSymbolOperation } from "../operations/GetInstrumentForSymbolOperation.js";
 
 const operations = [
   // service operations
-  ListAccountsOperation,
+  ListInstrumentsOperation,
+  GetInstrumentOperation,
+  GetInstrumentForSymbolOperation,
 
   // introspection
   // - methodz
@@ -14,9 +18,9 @@ const operations = [
   // - metricz
 ];
 
-export class AccountsServiceWorker {
+export class InstrumentsServiceWorker {
   constructor(
-    private accountsService: AccountsService,
+    private instrumentsService: InstrumentsService,
     private nats: NatsService,
     private logger: Logger,
   ) {}
@@ -34,12 +38,12 @@ export class AccountsServiceWorker {
 
     for await (const operation of operations) {
       this.nats.subscribeOperation(
+        // @ts-expect-error
         operation,
         {},
-        // @ts-expect-error
         async (request) => {
           // @ts-expect-error
-          return this.accountsService[operation.method](request);
+          return this.instrumentsService[operation.method](request);
         },
       );
     }

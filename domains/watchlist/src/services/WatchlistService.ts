@@ -36,11 +36,10 @@ export class WatchlistService {
       const result: GetWatchlistForAccountResult = {
         status: "success",
         count: items.length,
-        total: items.length,
         items,
       };
 
-      this.logger.info("getWatchlistForAccount", {
+      this.logger.debug("getWatchlistForAccount", {
         request,
         result,
       });
@@ -70,6 +69,8 @@ export class WatchlistService {
 
       await sender.flush();
       await sender.close();
+
+      this.logger.debug("addSymbolToWatchlist success", { request });
 
       return { status: "success" };
     } catch (error) {

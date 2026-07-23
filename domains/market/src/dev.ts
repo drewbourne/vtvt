@@ -1,8 +1,8 @@
 import { configure, getConsoleSink } from "@logtape/logtape";
 import { getPrettyFormatter } from "@logtape/pretty";
-import { marketContainer } from "./container.js";
+import { marketWorkerContainer } from "./container.js";
 
-const { loggerBase: logger, service } = marketContainer.cradle;
+const { loggerBase: logger, service } = marketWorkerContainer.cradle;
 
 async function main() {
   await configure({
@@ -25,7 +25,11 @@ async function main() {
     ],
   });
 
-  // TODO start worker
+  const { instrumentsWorker } = marketWorkerContainer.cradle;
+  logger.info("instrumentsWorker starting");
+
+  await instrumentsWorker.start();
+  logger.info("instrumentsWorker started");
 }
 
 main().catch((error) => logger.error(error));

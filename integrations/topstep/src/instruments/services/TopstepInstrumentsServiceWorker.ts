@@ -1,34 +1,25 @@
 import { NatsService } from "@fbt/nats";
-import { AccountsService } from "./AccountsService.js";
 import { Logger } from "@logtape/logtape";
-import { ListAccountsOperation } from "../operations/ListAccountsOperation.js";
+import { ListInstrumentsForBrokerOperation } from "@fbt/market/operations";
+import { TopstepInstrumentsService } from "./TopstepInstrumentsService.js";
 
-const operations = [
-  // service operations
-  ListAccountsOperation,
+const operations = [ListInstrumentsForBrokerOperation];
 
-  // introspection
-  // - methodz
-  // observability
-  // - healthz
-  // - metricz
-];
-
-export class AccountsServiceWorker {
+export class TopstepInstrumentsServiceWorker {
   constructor(
-    private accountsService: AccountsService,
+    private instrumentsService: TopstepInstrumentsService,
     private nats: NatsService,
     private logger: Logger,
   ) {}
 
   async start() {
-    this.logger.debug("start");
+    this.logger.info("start");
 
     this.subscribeOperations();
   }
 
   async subscribeOperations() {
-    this.logger.debug("subscribeOperations", {
+    this.logger.info("subscribeOperations", {
       operations: operations.map((o) => `${o.subject} -> ${o.method}`),
     });
 
@@ -39,7 +30,7 @@ export class AccountsServiceWorker {
         // @ts-expect-error
         async (request) => {
           // @ts-expect-error
-          return this.accountsService[operation.method](request);
+          return this.instrumentsService[operation.method](request);
         },
       );
     }

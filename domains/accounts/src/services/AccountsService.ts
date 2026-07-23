@@ -32,7 +32,6 @@ export class AccountsService {
 
     const result = {
       count: items.length,
-      total: items.length,
       items,
     };
 

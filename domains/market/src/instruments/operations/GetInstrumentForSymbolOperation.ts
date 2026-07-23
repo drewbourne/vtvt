@@ -26,7 +26,7 @@ export type GetInstrumentForSymbolResult = z.infer<
   typeof GetInstrumentForSymbolResult
 >;
 
-export const GetInstrumentOperation = serviceOperation({
+export const GetInstrumentForSymbolOperation = serviceOperation({
   method: "getInstrumentForSymbol",
   subject: "fbt.market.rpc.getInstrumentForSymbol",
   params: GetInstrumentForSymbolRequest,
