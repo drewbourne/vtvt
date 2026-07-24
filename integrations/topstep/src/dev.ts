@@ -1,5 +1,6 @@
 import { configure, getConsoleSink } from "@logtape/logtape";
 import { getPrettyFormatter } from "@logtape/pretty";
+import { getOpenTelemetrySink } from "@logtape/otel";
 import { topstepWorkerContainer } from "./container.js";
 
 const { loggerBase: logger, service } = topstepWorkerContainer.cradle;
@@ -10,6 +11,7 @@ async function main() {
       console: getConsoleSink({
         formatter: getPrettyFormatter({ properties: true }),
       }),
+      otel: getOpenTelemetrySink(),
     },
     loggers: [
       {
@@ -20,7 +22,7 @@ async function main() {
       {
         category: [service],
         lowestLevel: "debug",
-        sinks: ["console"],
+        sinks: ["console", "otel"],
       },
     ],
   });

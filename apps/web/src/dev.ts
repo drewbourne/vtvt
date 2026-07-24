@@ -1,49 +1,30 @@
-import { configure, getConsoleSink } from "@logtape/logtape";
-import { getPrettyFormatter } from "@logtape/pretty";
+import { configureLogging } from "@fbt/logging";
 import { Account, AccountId, BrokerId } from "@fbt/accounts/models";
 import { webContainer } from "./container.js";
 import { BrokerSymbolId, Symbol } from "@fbt/market/models";
+import { SpanKind, trace } from "@opentelemetry/api";
 
-const { loggerBase: logger, service } = webContainer.cradle;
+const { loggerBase: logger, service, version } = webContainer.cradle;
 
-async function main() {
-  await configure({
-    sinks: {
-      console: getConsoleSink({
-        formatter: getPrettyFormatter({ properties: true }),
-      }),
-    },
-    loggers: [
-      {
-        category: ["logtape", "meta"],
-        lowestLevel: "warning",
-        sinks: ["console"],
-      },
-      {
-        category: [service],
-        lowestLevel: "debug",
-        sinks: ["console"],
-      },
-    ],
-  });
-
-  logger.info({
-    message: "process.env",
-    "process.env": process.env,
-  });
-
-  // FIXME wait for services to announce liveness, readiness
-  logger.debug("waiting for services to start...");
-  await new Promise((resolve) => setTimeout(resolve, 5_000));
-
-  const accounts = await checkAccounts();
-
-  // const watchlist = await checkWatchlists(account);
-
-  await checkInstruments();
-}
+const tracer = trace.getTracer(service);
 
 main().catch((error) => logger.error(error));
+
+async function main() {
+  tracer.startActiveSpan("main", async () => {
+    await configureLogging({ service });
+
+    // FIXME wait for services to announce liveness, readiness
+    logger.debug("waiting for services to start...");
+    await new Promise((resolve) => setTimeout(resolve, 5_000));
+
+    const accounts = await checkAccounts();
+
+    // const watchlist = await checkWatchlists(account);
+
+    await checkInstruments();
+  });
+}
 
 async function checkAccounts() {
   const { accountsClient } = webContainer.cradle;

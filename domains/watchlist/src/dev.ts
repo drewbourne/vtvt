@@ -1,31 +1,10 @@
-import { configure, getConsoleSink } from "@logtape/logtape";
-import { getPrettyFormatter } from "@logtape/pretty";
+import { configureLogging } from "@fbt/logging";
 import { watchlistWorkerContainer } from "./container.js";
 
-const { loggerBase: logger } = watchlistWorkerContainer.cradle;
+const { loggerBase: logger, service } = watchlistWorkerContainer.cradle;
 
 async function main() {
-  const { service } = watchlistWorkerContainer.cradle;
-
-  await configure({
-    sinks: {
-      console: getConsoleSink({
-        formatter: getPrettyFormatter({ properties: true }),
-      }),
-    },
-    loggers: [
-      {
-        category: ["logtape", "meta"],
-        lowestLevel: "warning",
-        sinks: ["console"],
-      },
-      {
-        category: [service],
-        lowestLevel: "debug",
-        sinks: ["console"],
-      },
-    ],
-  });
+  await configureLogging({ service });
 
   const { watchlistWorker } = watchlistWorkerContainer.cradle;
 

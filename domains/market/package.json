@@ -23,11 +23,13 @@
   },
   "dependencies": {
     "@fbt/accounts": "workspace:*",
+    "@fbt/logging": "workspace:*",
     "@fbt/nats": "workspace:*",
     "@fbt/otel": "workspace:*",
     "@fbt/service": "workspace:*",
     "@fbt/typescript-config": "workspace:*",
     "@logtape/logtape": "^2.2.4",
+    "@logtape/otel": "^2.2.4",
     "@logtape/pretty": "^2.2.4",
     "@opentelemetry/api": "^1.9.1",
     "awilix": "^13.0.5",
