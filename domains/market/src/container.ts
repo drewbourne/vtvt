@@ -19,8 +19,8 @@ const container = createContainer({
 });
 
 export const marketContainer = container.register({
-  service: asValue("@fbt/market"),
-  version: asValue("0.0.1"),
+  service: asValue(process.env.npm_package_name ?? "unknown"),
+  version: asValue(process.env.npm_package_version ?? "0.0.1"),
 
   instrumentsService: asClass(InstrumentsService, {
     injectionMode: InjectionMode.CLASSIC,

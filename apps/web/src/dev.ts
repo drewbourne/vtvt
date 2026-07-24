@@ -27,6 +27,11 @@ async function main() {
     ],
   });
 
+  logger.info({
+    message: "process.env",
+    "process.env": process.env,
+  });
+
   // FIXME wait for services to announce liveness, readiness
   logger.debug("waiting for services to start...");
   await new Promise((resolve) => setTimeout(resolve, 5_000));

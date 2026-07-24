@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "dev": "tsx src/dev.ts",
+    "dev": "tsx --import=@fbt/otel/instrumentation src/dev.ts",
     "test": "vitest run",
     "test:watch": "vitest --watch"
   }

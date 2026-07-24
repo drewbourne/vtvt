@@ -19,7 +19,8 @@ export class AccountsServiceClient {
       request,
       ListAccountsOperation,
     );
-    this.logger.info("listAccounts", { request, result });
+
+    this.logger.debug("listAccounts", { request, result });
 
     return result;
   }

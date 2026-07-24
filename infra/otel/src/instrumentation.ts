@@ -1,32 +1,33 @@
 import { NodeSDK } from "@opentelemetry/sdk-node";
-import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-node";
+import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-node";
+import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import {
   defaultResource,
   resourceFromAttributes,
 } from "@opentelemetry/resources";
 import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import {
-  PeriodicExportingMetricReader,
-  ConsoleMetricExporter,
-} from "@opentelemetry/sdk-metrics";
-import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from "@opentelemetry/semantic-conventions";
+import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-grpc";
+import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-grpc";
 
 const resource = defaultResource().merge(
   resourceFromAttributes({
-    [ATTR_SERVICE_NAME]: process.env.SERVICE_NAME,
-    [ATTR_SERVICE_VERSION]: process.env.SERVICE_VERSION,
+    [ATTR_SERVICE_NAME]: process.env.npm_package_name,
+    [ATTR_SERVICE_VERSION]: process.env.npm_package_version,
   }),
 );
 
 const sdk = new NodeSDK({
   resource,
-  traceExporter: new ConsoleSpanExporter(),
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new ConsoleMetricExporter(),
-  }),
+  metricReaders: [
+    new PeriodicExportingMetricReader({
+      exporter: new OTLPMetricExporter(),
+    }),
+  ],
+  spanProcessors: [new BatchSpanProcessor(new OTLPTraceExporter())],
   instrumentations: [getNodeAutoInstrumentations()],
 });
 

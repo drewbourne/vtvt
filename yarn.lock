@@ -428,6 +428,9 @@ __metadata:
     "@opentelemetry/auto-instrumentations-node": "npm:^0.78.0"
     "@opentelemetry/context-async-hooks": "npm:^2.10.0"
     "@opentelemetry/core": "npm:^2.10.0"
+    "@opentelemetry/exporter-metrics-otlp-grpc": "npm:^0.221.0"
+    "@opentelemetry/exporter-trace-otlp-grpc": "npm:^0.221.0"
+    "@opentelemetry/exporter-trace-otlp-http": "npm:^0.221.0"
     "@opentelemetry/sdk-metrics": "npm:^2.10.0"
     "@opentelemetry/sdk-node": "npm:^0.221.0"
     "@opentelemetry/sdk-trace-node": "npm:^2.10.0"
@@ -1147,7 +1150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/exporter-metrics-otlp-grpc@npm:0.221.0":
+"@opentelemetry/exporter-metrics-otlp-grpc@npm:0.221.0, @opentelemetry/exporter-metrics-otlp-grpc@npm:^0.221.0":
   version: 0.221.0
   resolution: "@opentelemetry/exporter-metrics-otlp-grpc@npm:0.221.0"
   dependencies:
@@ -1262,7 +1265,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/exporter-trace-otlp-grpc@npm:0.221.0":
+"@opentelemetry/exporter-trace-otlp-grpc@npm:0.221.0, @opentelemetry/exporter-trace-otlp-grpc@npm:^0.221.0":
   version: 0.221.0
   resolution: "@opentelemetry/exporter-trace-otlp-grpc@npm:0.221.0"
   dependencies:
@@ -1291,7 +1294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@opentelemetry/exporter-trace-otlp-http@npm:0.221.0":
+"@opentelemetry/exporter-trace-otlp-http@npm:0.221.0, @opentelemetry/exporter-trace-otlp-http@npm:^0.221.0":
   version: 0.221.0
   resolution: "@opentelemetry/exporter-trace-otlp-http@npm:0.221.0"
   dependencies:

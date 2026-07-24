@@ -19,8 +19,8 @@ const container = createContainer({
 });
 
 export const webContainer = container.register({
-  service: asValue("@fbt/web"),
-  version: asValue("0.0.1"),
+  service: asValue(process.env.npm_package_name ?? "unknown"),
+  version: asValue(process.env.npm_package_version ?? "0.0.1"),
 
   accountsClient: asClass(AccountsServiceClient, {
     injectionMode: InjectionMode.CLASSIC,

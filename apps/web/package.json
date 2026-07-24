@@ -23,7 +23,7 @@
   },
   "scripts": {
     "_build": "vite build",
-    "dev": "tsx --env-file=.env.local --import=@fbt/otel/instrumentation src/dev.ts",
+    "dev": "tsx --import=@fbt/otel/instrumentation src/dev.ts",
     "test": "vitest run",
     "test:watch": "vitest --watch"
   }

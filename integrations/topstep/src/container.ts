@@ -22,8 +22,8 @@ const container = createContainer({
 });
 
 export const topstepContainer = container.register({
-  service: asValue("@fbt/topstep"),
-  version: asValue("0.0.1"),
+  service: asValue(process.env.npm_package_name ?? "unknown"),
+  version: asValue(process.env.npm_package_version ?? "0.0.1"),
 
   // secrets
   credentials: asValue(

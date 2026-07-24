@@ -18,8 +18,8 @@ const container = createContainer({
 });
 
 export const accountsContainer = container.register({
-  service: asValue("@fbt/accounts"),
-  version: asValue("0.0.1"),
+  service: asValue(process.env.npm_package_name ?? "unknown"),
+  version: asValue(process.env.npm_package_version ?? "0.0.1"),
   accountsService: asClass(AccountsService, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "accounts" }),

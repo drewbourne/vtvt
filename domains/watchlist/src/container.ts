@@ -21,8 +21,8 @@ const container = createContainer({
 });
 
 export const watchlistContainer = container.register({
-  service: asValue("@fbt/watchlist"),
-  version: asValue("0.0.1"),
+  service: asValue(process.env.npm_package_name ?? "unknown"),
+  version: asValue(process.env.npm_package_version ?? "0.0.1"),
   watchlistService: asClass(WatchlistService, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "watchlist" }),
