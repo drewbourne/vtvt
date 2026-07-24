@@ -408,6 +408,7 @@ __metadata:
     "@logtape/logtape": "npm:^2.2.4"
     "@nats-io/nats-core": "npm:^3.4.0"
     "@nats-io/transport-node": "npm:^3.4.0"
+    "@opentelemetry/api": "npm:^1.9.1"
     "@typescript/typescript6": "npm:^6.0.2"
     awilix: "npm:^13.0.5"
     typescript: "npm:^7.0.2"

@@ -1,8 +1,20 @@
 import { ServiceOperation, ServiceRpcSubject } from "@fbt/service";
 import { Logger } from "@logtape/logtape";
 import {
+  context,
+  propagation,
+  ROOT_CONTEXT,
+  SpanKind,
+  SpanStatusCode,
+  TextMapGetter,
+  TextMapSetter,
+  trace,
+} from "@opentelemetry/api";
+import {
   connect,
+  headers as createHeaders,
   Msg,
+  MsgHdrs,
   NatsConnection,
   Payload,
   PublishOptions,
@@ -12,6 +24,23 @@ import {
   SubscriptionOptions,
 } from "@nats-io/transport-node";
 import * as z from "zod";
+
+const tracer = trace.getTracer("@fbt/nats");
+
+const natsHeaderSetter: TextMapSetter<MsgHdrs> = {
+  set(carrier, key, value) {
+    carrier.set(key, value);
+  },
+};
+
+const natsHeaderGetter: TextMapGetter<MsgHdrs> = {
+  keys(carrier) {
+    return carrier.keys();
+  },
+  get(carrier, key) {
+    return carrier.get(key) || undefined;
+  },
+};
 
 export class NatsService {
   private nc: NatsConnection | null = null;
@@ -53,6 +82,8 @@ export class NatsService {
     handler?: (params: Params) => Promise<Result>,
   ) {
     this.subscribe(operation.subject, opts, async (msg) => {
+      trace.getActiveSpan()?.setAttribute("rpc.method", operation.method);
+
       try {
         const data = msg.json();
         const request = operation.params.parse(data);
@@ -95,19 +126,43 @@ export class NatsService {
 
     (async (sub: Subscription) => {
       for await (const msg of sub) {
-        try {
-          this.logger.debug(`handler`, {
-            subject,
-            opts,
-          });
+        const parentContext = msg.headers
+          ? propagation.extract(ROOT_CONTEXT, msg.headers, natsHeaderGetter)
+          : ROOT_CONTEXT;
 
-          await handler(msg);
-        } catch (error) {
-          this.logger.error({ subject, opts, msg, error });
-          this.logger.error(error as Error);
+        await context.with(parentContext, () =>
+          tracer.startActiveSpan(
+            `${subject} receive`,
+            {
+              kind: SpanKind.CONSUMER,
+              attributes: {
+                "messaging.system": "nats",
+                "messaging.destination.name": subject,
+                "messaging.operation.type": "receive",
+              },
+            },
+            async (span) => {
+              try {
+                this.logger.debug(`handler`, {
+                  subject,
+                  opts,
+                });
 
-          throw error;
-        }
+                await handler(msg);
+              } catch (error) {
+                this.logger.error({ subject, opts, msg, error });
+                this.logger.error(error as Error);
+
+                span.recordException(error as Error);
+                span.setStatus({ code: SpanStatusCode.ERROR });
+
+                throw error;
+              } finally {
+                span.end();
+              }
+            },
+          ),
+        );
       }
     })(sub);
   }
@@ -115,7 +170,34 @@ export class NatsService {
   async publish(subject: string, payload?: Payload, opts?: PublishOptions) {
     await this.connect();
 
-    await this.nc!.publish(subject, payload, opts);
+    return tracer.startActiveSpan(
+      `${subject} publish`,
+      {
+        kind: SpanKind.PRODUCER,
+        attributes: {
+          "messaging.system": "nats",
+          "messaging.destination.name": subject,
+          "messaging.operation.type": "publish",
+        },
+      },
+      async (span) => {
+        try {
+          const msgHeaders = opts?.headers ?? createHeaders();
+          propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
+
+          this.nc!.publish(subject, payload, {
+            ...opts,
+            headers: msgHeaders,
+          });
+        } catch (error) {
+          span.recordException(error as Error);
+          span.setStatus({ code: SpanStatusCode.ERROR });
+          throw error;
+        } finally {
+          span.end();
+        }
+      },
+    );
   }
 
   async requestOperation<
@@ -143,9 +225,37 @@ export class NatsService {
   async request(subject: string, payload?: Payload, opts?: RequestOptions) {
     await this.connect();
 
-    const result = await this.nc!.request(subject, payload, opts);
+    return tracer.startActiveSpan(
+      `${subject} request`,
+      {
+        kind: SpanKind.CLIENT,
+        attributes: {
+          "messaging.system": "nats",
+          "messaging.destination.name": subject,
+          "messaging.operation.type": "request",
+        },
+      },
+      async (span) => {
+        try {
+          const msgHeaders = opts?.headers ?? createHeaders();
+          propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
 
-    return result;
+          const result = await this.nc!.request(subject, payload, {
+            timeout: 1000,
+            ...opts,
+            headers: msgHeaders,
+          });
+
+          return result;
+        } catch (error) {
+          span.recordException(error as Error);
+          span.setStatus({ code: SpanStatusCode.ERROR });
+          throw error;
+        } finally {
+          span.end();
+        }
+      },
+    );
   }
 
   async requestManyOperation<
@@ -182,8 +292,37 @@ export class NatsService {
   ) {
     await this.connect();
 
-    const result = await this.nc!.requestMany(subject, payload, opts);
+    return tracer.startActiveSpan(
+      `${subject} requestMany`,
+      {
+        kind: SpanKind.CLIENT,
+        attributes: {
+          "messaging.system": "nats",
+          "messaging.destination.name": subject,
+          "messaging.operation.type": "request",
+        },
+      },
+      async (span) => {
+        try {
+          const msgHeaders = opts?.headers ?? createHeaders();
+          propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
 
-    return result;
+          const result = await this.nc!.requestMany(subject, payload, {
+            strategy: "timer",
+            maxWait: 1000,
+            ...opts,
+            headers: msgHeaders,
+          });
+
+          return result;
+        } catch (error) {
+          span.recordException(error as Error);
+          span.setStatus({ code: SpanStatusCode.ERROR });
+          throw error;
+        } finally {
+          span.end();
+        }
+      },
+    );
   }
 }
