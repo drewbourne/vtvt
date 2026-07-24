@@ -36,7 +36,7 @@ async function main() {
   logger.debug("waiting for services to start...");
   await new Promise((resolve) => setTimeout(resolve, 5_000));
 
-  // const accounts = await checkAccounts();
+  const accounts = await checkAccounts();
 
   // const watchlist = await checkWatchlists(account);
 

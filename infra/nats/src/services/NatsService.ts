@@ -1,9 +1,12 @@
 import { ServiceOperation, ServiceRpcSubject } from "@fbt/service";
 import { Logger } from "@logtape/logtape";
 import {
+  Attributes,
   context,
+  Context,
   propagation,
   ROOT_CONTEXT,
+  Span,
   SpanKind,
   SpanStatusCode,
   TextMapGetter,
@@ -41,6 +44,59 @@ const natsHeaderGetter: TextMapGetter<MsgHdrs> = {
     return carrier.get(key) || undefined;
   },
 };
+
+function messagingAttributes(
+  subject: string,
+  operationType: "publish" | "request" | "receive",
+): Attributes {
+  return {
+    "messaging.system": "nats",
+    "messaging.destination.name": subject,
+    "messaging.operation.type": operationType,
+  };
+}
+
+// Injects the active trace context into `headers` (creating one if not
+// given) so it rides along with the outbound NATS message.
+function injectHeaders(existing?: MsgHdrs): MsgHdrs {
+  const msgHeaders = existing ?? createHeaders();
+  propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
+  return msgHeaders;
+}
+
+// Runs `fn` inside a span, optionally rooted under `parentContext` (e.g. a
+// context extracted from an inbound message) rather than the ambient one.
+// Exceptions are recorded on the span and rethrown; the span always ends.
+async function withSpan<T>(
+  name: string,
+  options: {
+    kind: SpanKind;
+    attributes: Attributes;
+    parentContext?: Context;
+  },
+  fn: (span: Span) => Promise<T>,
+): Promise<T> {
+  const run = () =>
+    tracer.startActiveSpan(
+      name,
+      { kind: options.kind, attributes: options.attributes },
+      async (span) => {
+        try {
+          return await fn(span);
+        } catch (error) {
+          span.recordException(error as Error);
+          span.setStatus({ code: SpanStatusCode.ERROR });
+          throw error;
+        } finally {
+          span.end();
+        }
+      },
+    );
+
+  return options.parentContext
+    ? context.with(options.parentContext, run)
+    : run();
+}
 
 export class NatsService {
   private nc: NatsConnection | null = null;
@@ -130,38 +186,24 @@ export class NatsService {
           ? propagation.extract(ROOT_CONTEXT, msg.headers, natsHeaderGetter)
           : ROOT_CONTEXT;
 
-        await context.with(parentContext, () =>
-          tracer.startActiveSpan(
-            `${subject} receive`,
-            {
-              kind: SpanKind.CONSUMER,
-              attributes: {
-                "messaging.system": "nats",
-                "messaging.destination.name": subject,
-                "messaging.operation.type": "receive",
-              },
-            },
-            async (span) => {
-              try {
-                this.logger.debug(`handler`, {
-                  subject,
-                  opts,
-                });
+        await withSpan(
+          `${subject} receive`,
+          {
+            kind: SpanKind.CONSUMER,
+            attributes: messagingAttributes(subject, "receive"),
+            parentContext,
+          },
+          async () => {
+            this.logger.debug(`handler`, { subject, opts });
 
-                await handler(msg);
-              } catch (error) {
-                this.logger.error({ subject, opts, msg, error });
-                this.logger.error(error as Error);
-
-                span.recordException(error as Error);
-                span.setStatus({ code: SpanStatusCode.ERROR });
-
-                throw error;
-              } finally {
-                span.end();
-              }
-            },
-          ),
+            try {
+              await handler(msg);
+            } catch (error) {
+              this.logger.error({ subject, opts, msg, error });
+              this.logger.error(error as Error);
+              throw error;
+            }
+          },
         );
       }
     })(sub);
@@ -170,32 +212,17 @@ export class NatsService {
   async publish(subject: string, payload?: Payload, opts?: PublishOptions) {
     await this.connect();
 
-    return tracer.startActiveSpan(
+    return withSpan(
       `${subject} publish`,
       {
         kind: SpanKind.PRODUCER,
-        attributes: {
-          "messaging.system": "nats",
-          "messaging.destination.name": subject,
-          "messaging.operation.type": "publish",
-        },
+        attributes: messagingAttributes(subject, "publish"),
       },
-      async (span) => {
-        try {
-          const msgHeaders = opts?.headers ?? createHeaders();
-          propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
-
-          this.nc!.publish(subject, payload, {
-            ...opts,
-            headers: msgHeaders,
-          });
-        } catch (error) {
-          span.recordException(error as Error);
-          span.setStatus({ code: SpanStatusCode.ERROR });
-          throw error;
-        } finally {
-          span.end();
-        }
+      async () => {
+        this.nc!.publish(subject, payload, {
+          ...opts,
+          headers: injectHeaders(opts?.headers),
+        });
       },
     );
   }
@@ -213,48 +240,39 @@ export class NatsService {
     >,
     opts?: RequestOptions,
   ) {
-    const data = operation.params.parse(request);
-    const msg = JSON.stringify(data);
+    return withSpan(
+      `${operation.subject} requestOperation`,
+      {
+        kind: SpanKind.CLIENT,
+        attributes: messagingAttributes(operation.subject, "request"),
+      },
+      async () => {
+        const data = operation.params.parse(request);
+        const msg = JSON.stringify(data);
 
-    const res = await this.request(operation.subject, msg, opts);
-    const result = operation.result.parse(res.json());
+        const res = await this.request(operation.subject, msg, opts);
+        const result = operation.result.parse(res.json());
 
-    return result;
+        return result;
+      },
+    );
   }
 
   async request(subject: string, payload?: Payload, opts?: RequestOptions) {
     await this.connect();
 
-    return tracer.startActiveSpan(
+    return withSpan(
       `${subject} request`,
       {
         kind: SpanKind.CLIENT,
-        attributes: {
-          "messaging.system": "nats",
-          "messaging.destination.name": subject,
-          "messaging.operation.type": "request",
-        },
+        attributes: messagingAttributes(subject, "request"),
       },
-      async (span) => {
-        try {
-          const msgHeaders = opts?.headers ?? createHeaders();
-          propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
-
-          const result = await this.nc!.request(subject, payload, {
-            timeout: 1000,
-            ...opts,
-            headers: msgHeaders,
-          });
-
-          return result;
-        } catch (error) {
-          span.recordException(error as Error);
-          span.setStatus({ code: SpanStatusCode.ERROR });
-          throw error;
-        } finally {
-          span.end();
-        }
-      },
+      () =>
+        this.nc!.request(subject, payload, {
+          timeout: 1000,
+          ...opts,
+          headers: injectHeaders(opts?.headers),
+        }),
     );
   }
 
@@ -271,18 +289,27 @@ export class NatsService {
     >,
     opts?: RequestManyOptions,
   ) {
-    const data = operation.params.parse(request);
-    const msg = JSON.stringify(data);
+    return withSpan(
+      `${operation.subject} requestManyOperation`,
+      {
+        kind: SpanKind.CLIENT,
+        attributes: messagingAttributes(operation.subject, "request"),
+      },
+      async () => {
+        const data = operation.params.parse(request);
+        const msg = JSON.stringify(data);
 
-    const responses = await this.requestMany(operation.subject, msg, opts);
-    const results = [];
+        const responses = await this.requestMany(operation.subject, msg, opts);
+        const results = [];
 
-    for await (const res of responses) {
-      const result = operation.result.parse(res.json());
-      results.push(result);
-    }
+        for await (const res of responses) {
+          const result = operation.result.parse(res.json());
+          results.push(result);
+        }
 
-    return results;
+        return results;
+      },
+    );
   }
 
   async requestMany(
@@ -292,37 +319,19 @@ export class NatsService {
   ) {
     await this.connect();
 
-    return tracer.startActiveSpan(
+    return withSpan(
       `${subject} requestMany`,
       {
         kind: SpanKind.CLIENT,
-        attributes: {
-          "messaging.system": "nats",
-          "messaging.destination.name": subject,
-          "messaging.operation.type": "request",
-        },
+        attributes: messagingAttributes(subject, "request"),
       },
-      async (span) => {
-        try {
-          const msgHeaders = opts?.headers ?? createHeaders();
-          propagation.inject(context.active(), msgHeaders, natsHeaderSetter);
-
-          const result = await this.nc!.requestMany(subject, payload, {
-            strategy: "timer",
-            maxWait: 1000,
-            ...opts,
-            headers: msgHeaders,
-          });
-
-          return result;
-        } catch (error) {
-          span.recordException(error as Error);
-          span.setStatus({ code: SpanStatusCode.ERROR });
-          throw error;
-        } finally {
-          span.end();
-        }
-      },
+      () =>
+        this.nc!.requestMany(subject, payload, {
+          strategy: "timer",
+          maxWait: 1000,
+          ...opts,
+          headers: injectHeaders(opts?.headers),
+        }),
     );
   }
 }

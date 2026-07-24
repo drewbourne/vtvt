@@ -12,6 +12,7 @@
     "convert:user": "swagger2openapi  swagger/user-v1.0.0.json --outfile openapi/user-v1.0.0.json"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {

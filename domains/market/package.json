@@ -29,6 +29,7 @@
     "@fbt/typescript-config": "workspace:*",
     "@logtape/logtape": "^2.2.4",
     "@logtape/pretty": "^2.2.4",
+    "@opentelemetry/api": "^1.9.1",
     "awilix": "^13.0.5",
     "ts-pattern": "^5.9.0",
     "zod": "^4.4.3"
