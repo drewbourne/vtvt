@@ -15,17 +15,18 @@ import {
 } from "@opentelemetry/api";
 import {
   connect,
+  NatsConnection,
+  MsgHdrs,
   headers as createHeaders,
   Msg,
-  MsgHdrs,
-  NatsConnection,
   Payload,
   PublishOptions,
   RequestManyOptions,
   RequestOptions,
+  Service,
   Subscription,
   SubscriptionOptions,
-} from "@nats-io/transport-node";
+} from "nats";
 import * as z from "zod";
 
 const tracer = trace.getTracer("@fbt/nats");
@@ -101,11 +102,15 @@ async function withSpan<T>(
 export class NatsService {
   private nc: NatsConnection | null = null;
 
+  // private srv: Service | null = null;
+  // private js: Jetstream
+  // private jsm: JetstreamManager
+
   private pendingConnection: Promise<NatsConnection> | null = null;
 
   constructor(private logger: Logger) {}
 
-  private async connect() {
+  async connect() {
     if (this.pendingConnection) {
       return this.pendingConnection;
     }
@@ -114,9 +119,11 @@ export class NatsService {
       try {
         this.logger.debug("connect");
 
-        const connection = await connect();
-        this.nc = connection;
-        resolve(connection);
+        const nc = await connect();
+
+        this.nc = nc;
+
+        resolve(nc);
       } catch (error) {
         this.pendingConnection = null;
         this.nc = null;

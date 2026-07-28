@@ -1,0 +1,48 @@
+{
+  "name": "@fbt/system",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./models": {
+      "types": "./dist/models.d.ts",
+      "import": "./dist/models.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js"
+    }
+  },
+  "dependencies": {
+    "@fbt/accounts": "workspace:*",
+    "@fbt/logging": "workspace:*",
+    "@fbt/market": "workspace:*",
+    "@fbt/nats": "workspace:*",
+    "@fbt/otel": "workspace:*",
+    "@fbt/quest": "workspace:*",
+    "@fbt/redis": "workspace:*",
+    "@fbt/service": "workspace:*",
+    "@fbt/typescript-config": "workspace:*",
+    "@logtape/logtape": "^2.2.4",
+    "@logtape/otel": "^2.2.4",
+    "@logtape/pretty": "^2.2.4",
+    "@opentelemetry/api": "^1.9.1",
+    "awilix": "^13.0.5",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.0",
+    "vite": "^8.1.3",
+    "vitest": "^4.1.10"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "tsx --import=@fbt/otel/instrumentation src/dev.ts",
+    "test": "vitest run",
+    "test:watch": "vitest --watch"
+  }
+}
