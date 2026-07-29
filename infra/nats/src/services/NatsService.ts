@@ -12,6 +12,7 @@ import {
   TextMapGetter,
   TextMapSetter,
   trace,
+  Tracer,
 } from "@opentelemetry/api";
 import {
   connect,
@@ -29,7 +30,7 @@ import {
 } from "nats";
 import * as z from "zod";
 
-const tracer = trace.getTracer("@fbt/nats");
+const defaultTracer = trace.getTracer("@fbt/nats");
 
 const natsHeaderSetter: TextMapSetter<MsgHdrs> = {
   set(carrier, key, value) {
@@ -71,6 +72,7 @@ function injectHeaders(existing?: MsgHdrs): MsgHdrs {
 async function withSpan<T>(
   name: string,
   options: {
+    tracer: Tracer;
     kind: SpanKind;
     attributes: Attributes;
     parentContext?: Context;
@@ -78,7 +80,7 @@ async function withSpan<T>(
   fn: (span: Span) => Promise<T>,
 ): Promise<T> {
   const run = () =>
-    tracer.startActiveSpan(
+    options.tracer.startActiveSpan(
       name,
       { kind: options.kind, attributes: options.attributes },
       async (span) => {
@@ -108,7 +110,10 @@ export class NatsService {
 
   private pendingConnection: Promise<NatsConnection> | null = null;
 
-  constructor(private logger: Logger) {}
+  constructor(
+    private logger: Logger,
+    private tracer: Tracer,
+  ) {}
 
   async connect() {
     if (this.pendingConnection) {
@@ -197,6 +202,7 @@ export class NatsService {
         await withSpan(
           `${subject} receive`,
           {
+            tracer: this.tracer,
             kind: SpanKind.CONSUMER,
             attributes: messagingAttributes(subject, "receive"),
             parentContext,
@@ -207,7 +213,12 @@ export class NatsService {
             try {
               await handler(msg);
             } catch (error) {
-              this.logger.error({ subject, opts, msg, error });
+              this.logger.error({
+                subject,
+                opts,
+                headers: msg.headers,
+                error,
+              });
               this.logger.error(error as Error);
               throw error;
             }
@@ -223,6 +234,7 @@ export class NatsService {
     return withSpan(
       `${subject} publish`,
       {
+        tracer: this.tracer,
         kind: SpanKind.PRODUCER,
         attributes: messagingAttributes(subject, "publish"),
       },
@@ -251,6 +263,7 @@ export class NatsService {
     return withSpan(
       `${operation.subject} requestOperation`,
       {
+        tracer: this.tracer,
         kind: SpanKind.CLIENT,
         attributes: messagingAttributes(operation.subject, "request"),
       },
@@ -281,6 +294,7 @@ export class NatsService {
     return withSpan(
       `${subject} request`,
       {
+        tracer: this.tracer,
         kind: SpanKind.CLIENT,
         attributes: messagingAttributes(subject, "request"),
       },
@@ -309,6 +323,7 @@ export class NatsService {
     return withSpan(
       `${operation.subject} requestManyOperation`,
       {
+        tracer: this.tracer,
         kind: SpanKind.CLIENT,
         attributes: messagingAttributes(operation.subject, "request"),
       },
@@ -339,6 +354,7 @@ export class NatsService {
     return withSpan(
       `${subject} requestMany`,
       {
+        tracer: this.tracer,
         kind: SpanKind.CLIENT,
         attributes: messagingAttributes(subject, "request"),
       },

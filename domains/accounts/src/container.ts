@@ -1,6 +1,4 @@
-import { NatsService } from "@fbt/nats";
 import { registerNats } from "@fbt/nats/awilix";
-import { Logger } from "@logtape/logtape";
 import {
   asClass,
   asValue,
@@ -11,6 +9,11 @@ import {
 import { AccountsService } from "./service.js";
 import { AccountsServiceWorker } from "./worker.js";
 import { registerLogger, injectLogger } from "@fbt/logging/awilix";
+import { registerOtel } from "@fbt/otel/awilix";
+import { OtelService } from "@fbt/otel";
+
+const service = process.env.npm_package_name ?? "unknown";
+const version = process.env.npm_package_version ?? "0.0.1";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -18,8 +21,9 @@ const container = createContainer({
 });
 
 export const accountsContainer = container.register({
-  service: asValue(process.env.npm_package_name ?? "unknown"),
-  version: asValue(process.env.npm_package_version ?? "0.0.1"),
+  service: asValue(service),
+  version: asValue(version),
+
   accountsService: asClass(AccountsService, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "accounts" }),
@@ -27,6 +31,7 @@ export const accountsContainer = container.register({
 
   // dependencies
   ...registerLogger(),
+  ...registerOtel(),
   ...registerNats(),
 });
 

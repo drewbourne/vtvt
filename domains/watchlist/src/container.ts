@@ -14,6 +14,8 @@ import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { registerQuest } from "@fbt/quest/awilix";
 import { registerRedis } from "@fbt/redis/awilix";
 import { RedisService } from "@fbt/redis";
+import { registerOtel } from "@fbt/otel/awilix";
+import { OtelService } from "@fbt/otel";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -30,6 +32,7 @@ export const watchlistContainer = container.register({
 
   // dependencies
   ...registerLogger(),
+  ...registerOtel(),
   ...registerNats(),
   ...registerQuest(),
   ...registerRedis(),

@@ -12,14 +12,17 @@ import { WatchlistServiceClient } from "@fbt/watchlist";
 import { InstrumentsServiceClient } from "@fbt/market";
 import { trace } from "@opentelemetry/api";
 
+const service = process.env.npm_package_name ?? "unknown";
+const version = process.env.npm_package_version ?? "0.0.1";
+
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
   strict: true,
 });
 
 export const appContainer = container.register({
-  service: asValue(process.env.npm_package_name ?? "unknown"),
-  version: asValue(process.env.npm_package_version ?? "0.0.1"),
+  service: asValue(service),
+  version: asValue(version),
 
   accountsClient: asClass(AccountsServiceClient, {
     injectionMode: InjectionMode.CLASSIC,
@@ -37,7 +40,7 @@ export const appContainer = container.register({
   // dependencies
   ...registerLogger(),
   ...registerNats(),
-  tracer: asValue(trace.getTracer("@fbt/next")),
+  tracer: asValue(trace.getTracer(service)),
 });
 
 export type AppCradle = InferCradleFromContainer<typeof appContainer>;

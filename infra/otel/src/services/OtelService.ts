@@ -13,7 +13,7 @@ import { MeterProvider } from "@opentelemetry/sdk-metrics";
 
 export class OtelService {
   constructor(
-    private name: string,
+    private service: string,
     private version: string,
     private logger: Logger,
   ) {
@@ -46,10 +46,10 @@ export class OtelService {
   }
 
   getMeter() {
-    return metrics.getMeter(this.name, this.version);
+    return metrics.getMeter(this.service, this.version);
   }
 
   getTracer() {
-    return trace.getTracer(this.name, this.version);
+    return trace.getTracer(this.service, this.version);
   }
 }

@@ -8,6 +8,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./awilix": {
+      "types": "./dist/awilix.d.ts",
+      "import": "./dist/awilix.js"
+    },
     "./instrumentation": {
       "types": "./dist/instrumentation.d.ts",
       "import": "./dist/instrumentation.js"

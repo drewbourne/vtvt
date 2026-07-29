@@ -12,6 +12,8 @@ import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { MarketWorker } from "./worker.js";
 import { InstrumentsService } from "./instruments/services/InstrumentsService.js";
 import { InstrumentsServiceWorker } from "./instruments/services/InstrumentsServiceWorker.js";
+import { registerOtel } from "@fbt/otel/awilix";
+import { OtelService } from "@fbt/otel";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -29,6 +31,7 @@ export const marketContainer = container.register({
 
   // dependencies
   ...registerLogger(),
+  ...registerOtel(),
   ...registerNats(),
 });
 

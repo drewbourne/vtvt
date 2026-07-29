@@ -12,6 +12,8 @@ import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { AccountsServiceClient } from "@fbt/accounts";
 import { WatchlistServiceClient } from "@fbt/watchlist";
 import { InstrumentsServiceClient } from "@fbt/market";
+import { registerOtel } from "@fbt/otel/awilix";
+import { OtelService } from "@fbt/otel";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -37,6 +39,7 @@ export const webContainer = container.register({
 
   // dependencies
   ...registerLogger(),
+  ...registerOtel(),
   ...registerNats(),
 });
 
