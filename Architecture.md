@@ -1,4 +1,4 @@
-# fbt/vtvt: VibeTrader
+# fbt/vtvt
 
 This project is a trading platform for use by a single trader with multiple across, across multiple brokers.
 
@@ -25,10 +25,12 @@ See additional details on these constraints below.
 ## Architecture
 
 - Runtime
+
   - Config
   - Secrets
 
 - Domain services
+
   - Accounts
   - Market
   - Trading
@@ -51,8 +53,10 @@ See [Services & Operations](./Services%20&%20Operations.md)
 
 ### NATS Subjects
 
-- `fbt.<service>.rpc.<operation>`
-- `fbt.<service>.event.<event>`
+- `fbt.<domain>.rpc.<operation>`
+- `fbt.event.<domain>.(<service>.)?<event>`
+- `fbt.hb.<domain>.(<service>.)?`
+- `fbt.<domain>.status
 
 ## Accounts
 
@@ -60,15 +64,15 @@ See [Services & Operations](./Services%20&%20Operations.md)
   - Accounts
     - `fbt.accounts.rpc.list_accounts`
     - `fbt.accounts.rpc.get_account`
-    - `fbt.accounts.event.account_added`
-    - `fbt.accounts.event.account_updated`
-    - `fbt.accounts.event.account_removed`
+    - `fbt.events.accounts.account_added`
+    - `fbt.events.accounts.account_updated`
+    - `fbt.events.accounts.account_removed`
   - Brokers
     - `fbt.accounts.rpc.list_brokers`
     - `fbt.accounts.rpc.get_broker`
-    - `fbt.accounts.event.brokers_added`
-    - `fbt.accounts.event.brokers_updated`
-    - `fbt.accounts.event.brokers_removed`
+    - `fbt.events.accounts.brokers_added`
+    - `fbt.events.accounts.brokers_updated`
+    - `fbt.events.accounts.brokers_removed`
 - QuestDB tables
   - `accounts`
     - `id`: symbol
@@ -98,12 +102,12 @@ See [Services & Operations](./Services%20&%20Operations.md)
     - `fbt.market.rpc.subscribe_instrument`
   - Quotes
     - `fbt.market.rpc.subscribe_instrument_quotes`
-    - `fbt.market.events.quote`
+    - `fbt.events.market.quote`
   - Trades
     - `fbt.market.rpc.subscribe_instrument_trades`
-    - `fbt.market.events.trade`
+    - `fbt.events.market.trade`
   - Health
-    - `fbt.market.events.health`
+    - `fbt.events.market.health`
 - QuestDB tables
   - `instruments`: Instrument
   - `quotes`: Quote

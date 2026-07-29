@@ -1,6 +1,6 @@
 {
-  "name": "next",
-  "version": "0.1.0",
+  "name": "@fbt/next",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "prepare": "panda codegen",
@@ -9,13 +9,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fbt/context": "workspace:*",
     "@fbt/logging": "workspace:*",
     "@fbt/nats": "workspace:*",
     "@fbt/otel": "workspace:*",
     "@logtape/logtape": "^2.2.4",
+    "@opentelemetry/api": "^1.9.1",
     "@opentelemetry/api-logs": "^0.221.0",
     "@opentelemetry/instrumentation": "^0.221.0",
+    "@opentelemetry/resources": "^2.10.0",
     "@opentelemetry/sdk-logs": "^0.221.0",
+    "@opentelemetry/sdk-metrics": "^2.10.0",
+    "@opentelemetry/sdk-trace-base": "^2.10.0",
     "@vercel/otel": "^2.1.3",
     "lucide-react": "^1.27.0",
     "next": "16.2.11",

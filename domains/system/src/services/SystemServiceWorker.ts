@@ -1,5 +1,6 @@
 import { NatsService } from "@fbt/nats";
 import { Logger } from "@logtape/logtape";
+import { SystemService } from "./SystemService.js";
 
 const operations = [];
 
@@ -9,6 +10,7 @@ export class SystemServiceWorker {
   constructor(
     private logger: Logger,
     private nats: NatsService,
+    private system: SystemService,
   ) {}
 
   async start() {

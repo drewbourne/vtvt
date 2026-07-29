@@ -1,5 +1,5 @@
 {
-  "name": "@fbt/logging",
+  "name": "@fbt/context",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -7,22 +7,18 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    },
-    "./awilix": {
-      "types": "./dist/awilix.d.ts",
-      "import": "./dist/awilix.js"
     }
   },
   "dependencies": {
+    "@fbt/logging": "workspace:*",
+    "@fbt/otel": "workspace:*",
+    "@fbt/service": "workspace:*",
     "@logtape/logtape": "^2.2.4",
-    "@opentelemetry/api": "^1.9.1",
-    "@opentelemetry/exporter-logs-otlp-grpc": "0.221.0",
-    "@opentelemetry/sdk-logs": "^0.221.0",
-    "awilix": "^13.0.5",
-    "zod": "^4.4.3"
+    "@opentelemetry/api": "^1.9.1"
   },
   "devDependencies": {
     "@fbt/typescript-config": "workspace:*",
+    "@types/node": "^24",
     "@typescript/typescript6": "^6.0.2",
     "typescript": "^7.0.2",
     "vite": "^8.1.3",

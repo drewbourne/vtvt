@@ -1,7 +1,7 @@
 import { Panel, PanelContent, PanelHeader } from "@/ui/panel/Panel";
 import { AccountsTable } from "./AccountsTable";
 
-export function AccountsPanel() {
+export async function AccountsPanel() {
   return (
     <Panel>
       <PanelHeader>

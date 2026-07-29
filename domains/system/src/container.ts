@@ -8,11 +8,12 @@ import {
   InferCradleFromContainer,
   InjectionMode,
 } from "awilix";
-import { SystemService } from "./service.js";
-import { SystemServiceWorker } from "./worker.js";
+import { SystemService } from "./services/SystemService.js";
+import { SystemServiceWorker } from "./services/SystemServiceWorker.js";
 import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { registerQuest } from "@fbt/quest/awilix";
 import { registerRedis } from "@fbt/redis/awilix";
+import { QuestService } from "@fbt/quest";
 import { RedisService } from "@fbt/redis";
 
 const container = createContainer({

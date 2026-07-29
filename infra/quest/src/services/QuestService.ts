@@ -31,7 +31,7 @@ export class QuestService {
    *
    * @example
    * ```ts
-   * import { createSender } from '@vibetrader/quest';
+   * import { createSender } from '@fbt/quest';
    *
    * const sender = await createSender();
    * await sender

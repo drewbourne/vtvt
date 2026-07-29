@@ -10,6 +10,7 @@ import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { AccountsServiceClient } from "@fbt/accounts";
 import { WatchlistServiceClient } from "@fbt/watchlist";
 import { InstrumentsServiceClient } from "@fbt/market";
+import { trace } from "@opentelemetry/api";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -36,6 +37,7 @@ export const appContainer = container.register({
   // dependencies
   ...registerLogger(),
   ...registerNats(),
+  tracer: asValue(trace.getTracer("@fbt/next")),
 });
 
 export type AppCradle = InferCradleFromContainer<typeof appContainer>;

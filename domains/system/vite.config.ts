@@ -13,8 +13,8 @@ export default defineConfig({
       entry: {
         index: resolve(import.meta.dirname, "src/index.ts"),
         models: resolve(import.meta.dirname, "src/models.ts"),
-        service: resolve(import.meta.dirname, "src/service.ts"),
-        worker: resolve(import.meta.dirname, "src/worker.ts"),
+        // service: resolve(import.meta.dirname, "src/service.ts"),
+        // worker: resolve(import.meta.dirname, "src/worker.ts"),
       },
       name: packageJson.name,
       fileName: (format, entry) => `${entry}.${format}`,

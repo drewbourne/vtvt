@@ -11,10 +11,6 @@
     "./models": {
       "types": "./dist/models.d.ts",
       "import": "./dist/models.js"
-    },
-    "./server": {
-      "types": "./dist/server.d.ts",
-      "import": "./dist/server.js"
     }
   },
   "dependencies": {
@@ -41,6 +37,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "check-types": "tsc --noEmit",
     "dev": "tsx --import=@fbt/otel/instrumentation src/dev.ts",
     "test": "vitest run",
     "test:watch": "vitest --watch"

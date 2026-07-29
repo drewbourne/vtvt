@@ -23,9 +23,9 @@ import {
   PublishOptions,
   RequestManyOptions,
   RequestOptions,
-  Service,
   Subscription,
   SubscriptionOptions,
+  RequestStrategy,
 } from "nats";
 import * as z from "zod";
 
@@ -151,6 +151,7 @@ export class NatsService {
         const data = msg.json();
         const request = operation.params.parse(data);
 
+        // TODO pass msg? headers?
         // TODO wrap in try-catch
         // @ts-expect-error
         const res = await handler(request);
@@ -260,6 +261,15 @@ export class NatsService {
         const res = await this.request(operation.subject, msg, opts);
         const result = operation.result.parse(res.json());
 
+        this.logger.info("requestOperation result", {
+          subject: res.subject,
+          headers: res.headers,
+          request,
+          result,
+        });
+
+        // TODO return msg? headers?
+
         return result;
       },
     );
@@ -334,7 +344,7 @@ export class NatsService {
       },
       () =>
         this.nc!.requestMany(subject, payload, {
-          strategy: "timer",
+          strategy: RequestStrategy.Timer,
           maxWait: 1000,
           ...opts,
           headers: injectHeaders(opts?.headers),
