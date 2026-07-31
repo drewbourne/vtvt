@@ -15,7 +15,6 @@ import {
   Tracer,
 } from "@opentelemetry/api";
 import {
-  connect,
   NatsConnection,
   MsgHdrs,
   headers as createHeaders,
@@ -27,6 +26,7 @@ import {
   Subscription,
   SubscriptionOptions,
   RequestStrategy,
+  Service,
 } from "nats";
 import * as z from "zod";
 
@@ -104,39 +104,19 @@ async function withSpan<T>(
 export class NatsService {
   private nc: NatsConnection | null = null;
 
-  // private srv: Service | null = null;
   // private js: Jetstream
   // private jsm: JetstreamManager
-
-  private pendingConnection: Promise<NatsConnection> | null = null;
 
   constructor(
     private logger: Logger,
     private tracer: Tracer,
+    private natsConnection: Promise<NatsConnection>,
   ) {}
 
-  async connect() {
-    if (this.pendingConnection) {
-      return this.pendingConnection;
-    }
-
-    this.pendingConnection = new Promise(async (resolve, reject) => {
-      try {
-        this.logger.debug("connect");
-
-        const nc = await connect();
-
-        this.nc = nc;
-
-        resolve(nc);
-      } catch (error) {
-        this.pendingConnection = null;
-        this.nc = null;
-        reject(error);
-      }
-    });
-
-    return this.pendingConnection;
+  async connect(): Promise<NatsConnection> {
+    this.nc = await this.natsConnection;
+    if (!this.nc) throw new Error(`Unable to connect to NATS`);
+    return this.nc!;
   }
 
   async subscribeOperation<
@@ -367,4 +347,56 @@ export class NatsService {
         }),
     );
   }
+
+  // async addService(service: ServiceDescriptor): Promise<Service> {
+  //   const nc = await this.connect();
+
+  //   const sd = ServiceDescriptor.parse(service);
+
+  //   const svc = await nc.services.add({
+  //     name: sd.name,
+  //     version: sd.version,
+  //     description: sd.description,
+  //     metadata: sd.metadata,
+  //   });
+
+  //   svc.stopped.then((error) => {
+  //     this.logger.error(`svc.stopped`, { error });
+  //   });
+
+  //   for (const op of sd.operations) {
+  //     svc.addEndpoint(op.method, {
+  //       subject: op.subject,
+  //       metadata: op.metadata,
+  //       handler: (err, msg) => {
+  //         // TODO
+  //         // this.handleServiceOperationMessage(sd, operation, err, msg);
+  //       },
+  //     });
+  //   }
+
+  //   return svc;
+  // }
+
+  // async handleServiceOperationMessage(sd, operation, err, msg) {
+  //   return this.tracer.startActiveSpan(operation.subject, async () => {});
+  // }
 }
+
+// const ServiceDescriptor = z.object({
+//   name: z.string(),
+//   version: z.string(),
+//   description: z.string(),
+//   metadata: z.record(z.string(), z.string()).optional(),
+//   operations: z.array(
+//     z.object({
+//       method: z.string(),
+//       params: z.any(),
+//       result: z.any(),
+//       subject: z.string(),
+//       metadata: z.record(z.string(), z.string()).optional(),
+//     }),
+//   ),
+// });
+
+// type ServiceDescriptor = z.infer<typeof ServiceDescriptor>;

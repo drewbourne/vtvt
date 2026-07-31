@@ -15,14 +15,68 @@ async function main() {
     await configureLogging({ service });
 
     // FIXME wait for services to announce liveness, readiness
-    logger.debug("waiting for services to start...");
-    await new Promise((resolve) => setTimeout(resolve, 5_000));
+    // logger.debug("waiting for services to start...");
+    // await new Promise((resolve) => setTimeout(resolve, 5_000));
 
-    const accounts = await checkAccounts();
+    await checkClients();
+
+    // await checkSystem();
+
+    // const accounts = await checkAccounts();
 
     // const watchlist = await checkWatchlists(account);
 
-    await checkInstruments();
+    // await checkInstruments();
+  });
+}
+
+async function checkClients() {
+  const client1 = webContainer.cradle.natsClient;
+  await client1.connect();
+  client1.subscribe("fbt.web.rpc.client1", {}, async (msg) => {
+    logger.info(`client 1 received: ${msg.subject}`, {
+      payload: msg.json(),
+      headers: msg.headers,
+    });
+    msg.respond(JSON.stringify({ replyFrom: "client1" }));
+  });
+
+  const client2 = webContainer.cradle.natsClient;
+  await client2.connect();
+  const msg = await client2.request(
+    "fbt.web.rpc.client1",
+    JSON.stringify({ sentFrom: "client2" }),
+  );
+  logger.info(`client2 received reply: ${msg?.subject}`, {
+    payload: msg?.json(),
+    headers: msg?.headers,
+  });
+}
+
+async function checkSystem() {
+  tracer.startActiveSpan("checkSystem", async () => {
+    const { nats } = webContainer.cradle;
+
+    const nc = await nats.connect();
+    const sc = nc.services.client();
+
+    let iter = await sc.ping();
+    logger.debug("results from PING");
+    for await (const si of iter) {
+      logger.debug({ ...si });
+    }
+
+    iter = await sc.info();
+    logger.debug("results from INFO");
+    for await (const i of iter) {
+      logger.debug({ ...i });
+    }
+
+    iter = await sc.stats();
+    logger.debug("results from STATS");
+    for await (const si of iter) {
+      logger.debug({ ...si });
+    }
   });
 }
 

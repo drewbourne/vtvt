@@ -14,6 +14,7 @@
     }
   },
   "dependencies": {
+    "@fbt/context": "workspace:*",
     "@fbt/logging": "workspace:*",
     "@fbt/service": "workspace:*",
     "@logtape/logtape": "^2.2.4",
@@ -22,6 +23,7 @@
     "@opentelemetry/api": "^1.9.1",
     "awilix": "^13.0.5",
     "nats": "^2.29.3",
+    "uuid": "^14.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -34,6 +36,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "check-types": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest --watch"
   }
