@@ -5,7 +5,7 @@ import {
 } from "../operations/ListAccountsOperation.js";
 import { NatsService } from "@fbt/nats";
 import { ListAccountsForBrokerOperation } from "../operations/ListAccountsForBrokerOperation.js";
-
+import { RequestStrategy } from "nats";
 export class AccountsService {
   constructor(
     private logger: Logger,
@@ -21,7 +21,7 @@ export class AccountsService {
       request,
       ListAccountsForBrokerOperation,
       {
-        strategy: "count",
+        strategy: RequestStrategy.Count,
         // FIXME should based on the number of registered brokers
         maxMessages: 1,
         maxWait: 5_000,

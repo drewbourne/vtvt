@@ -4,6 +4,7 @@ import { Logger } from "@logtape/logtape";
 import {
   asClass,
   asValue,
+  AwilixContainer,
   createContainer,
   InferCradleFromContainer,
   InjectionMode,
@@ -26,6 +27,7 @@ const container = createContainer({
 export const systemContainer = container.register({
   service: asValue(process.env.npm_package_name ?? "unknown"),
   version: asValue(process.env.npm_package_version ?? "0.0.1"),
+
   systemService: asClass(SystemService, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "system" }),
@@ -44,6 +46,10 @@ export type SystemCradle = InferCradleFromContainer<typeof systemContainer>;
 export const systemWorkerContainer = systemContainer.createScope().register({
   systemWorker: asClass(SystemServiceWorker, {
     injectionMode: InjectionMode.CLASSIC,
-    injector: injectLogger({ name: "worker" }),
+    // injector: injectLogger({ name: "worker" }),
+    injector: (container: AwilixContainer<object>) => ({
+      ...injectLogger({ name: "worker" })(container),
+      container,
+    }),
   }),
 });

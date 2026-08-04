@@ -13,7 +13,13 @@ import {
   TextMapSetter,
   Tracer,
 } from "@opentelemetry/api";
-import { headers as createHeaders, MsgHdrs, Payload, Msg } from "nats";
+import {
+  headers as createHeaders,
+  MsgHdrs,
+  Payload,
+  Msg,
+  NatsError,
+} from "nats";
 import { v6 as uuid_v6 } from "uuid";
 
 export type NatsTracerSpanOperation =
@@ -99,6 +105,14 @@ export class NatsTracer {
         try {
           return await handler(span);
         } catch (error) {
+          if (error instanceof NatsError) {
+            span.setAttributes({
+              "messaging.error.name": error.name,
+              "messaging.error.code": error.code,
+            });
+            // TODO set more attributes from error
+          }
+
           span.recordException(error as Error);
           span.setStatus({ code: SpanStatusCode.ERROR });
           throw error;

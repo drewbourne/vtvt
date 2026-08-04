@@ -15,6 +15,8 @@ import { TopstepAuthService } from "./auth/services/TopstepAuthService.js";
 import { TopstepAccountsService } from "./accounts/services/TopstepAccountsService.js";
 import { TopstepInstrumentsServiceWorker } from "./instruments/services/TopstepInstrumentsServiceWorker.js";
 import { TopstepInstrumentsService } from "./instruments/services/TopstepInstrumentsService.js";
+import { registerOtel } from "@fbt/otel/awilix";
+import { OtelService } from "@fbt/otel";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -49,6 +51,7 @@ export const topstepContainer = container.register({
 
   // dependencies
   ...registerLogger(),
+  ...registerOtel(),
   ...registerNats(),
   ...registerRedis(),
 });

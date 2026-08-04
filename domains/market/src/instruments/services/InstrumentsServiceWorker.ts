@@ -1,51 +1,52 @@
-import { NatsService } from "@fbt/nats";
+import { NatsServiceWorker } from "@fbt/nats";
 import { InstrumentsService } from "./InstrumentsService.js";
 import { Logger } from "@logtape/logtape";
 import { ListInstrumentsOperation } from "../operations/ListInstrumentsOperation.js";
 import { GetInstrumentOperation } from "../operations/GetInstrumentOperation.js";
 import { GetInstrumentForSymbolOperation } from "../operations/GetInstrumentForSymbolOperation.js";
 
-const operations = [
-  // service operations
-  ListInstrumentsOperation,
-  GetInstrumentOperation,
-  GetInstrumentForSymbolOperation,
-
-  // introspection
-  // - methodz
-  // observability
-  // - healthz
-  // - metricz
-];
-
 export class InstrumentsServiceWorker {
   constructor(
-    private instrumentsService: InstrumentsService,
-    private nats: NatsService,
     private logger: Logger,
+    private service: string,
+    private version: string,
+    private natsServiceWorker: NatsServiceWorker,
+    private instrumentsService: InstrumentsService,
   ) {}
 
   async start() {
     this.logger.debug("start");
 
-    this.subscribeOperations();
-  }
-
-  async subscribeOperations() {
-    this.logger.debug("subscribeOperations", {
-      operations: operations.map((o) => `${o.subject} -> ${o.method}`),
-    });
-
-    for await (const operation of operations) {
-      this.nats.subscribeOperation(
-        // @ts-expect-error
-        operation,
-        {},
-        async (request) => {
-          // @ts-expect-error
-          return this.instrumentsService[operation.method](request);
-        },
-      );
-    }
+    await this.natsServiceWorker.addService(
+      {
+        name: `fbt.accounts`,
+        version: this.version,
+        description: `${this.service} v${this.version}`,
+        metadata: { serviceLevel: "1" },
+      },
+      [
+        this.natsServiceWorker.handler(
+          ListInstrumentsOperation,
+          { operationLevel: "2" },
+          async ({ params }) => {
+            return this.instrumentsService.listInstruments(params);
+          },
+        ),
+        this.natsServiceWorker.handler(
+          GetInstrumentOperation,
+          { operationLevel: "2" },
+          async ({ params }) => {
+            return this.instrumentsService.getInstrument(params);
+          },
+        ),
+        this.natsServiceWorker.handler(
+          GetInstrumentForSymbolOperation,
+          { operationLevel: "2" },
+          async ({ params }) => {
+            return this.instrumentsService.getInstrumentForSymbol(params);
+          },
+        ),
+      ],
+    );
   }
 }

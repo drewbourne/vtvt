@@ -1,9 +1,10 @@
-import { asClass, asFunction, asValue, InjectionMode } from "awilix";
+import { asClass, asFunction, InjectionMode } from "awilix";
 import { NatsService } from "./services/NatsService.js";
 import { injectLogger } from "@fbt/logging/awilix";
 import { connect, ConnectionOptions, NatsConnection } from "nats";
 import { NatsTracer } from "./services/NatsTracer.js";
 import { NatsClient } from "./services/NatsClient.js";
+import { NatsServiceWorker } from "./services/NatsServiceWorker.js";
 
 // FIXME pass in natsConnectionOptions
 export function registerNats() {
@@ -32,6 +33,10 @@ export function registerNats() {
     natsClient: asClass(NatsClient, {
       injectionMode: InjectionMode.CLASSIC,
       injector: injectLogger({ name: "natsClient" }),
+    }),
+    natsServiceWorker: asClass(NatsServiceWorker, {
+      injectionMode: InjectionMode.CLASSIC,
+      injector: injectLogger({ name: "natsServiceWorker" }),
     }),
     // @deprecated use NatsClient
     nats: asClass(NatsService, {

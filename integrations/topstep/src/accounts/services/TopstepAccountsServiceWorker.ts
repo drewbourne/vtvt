@@ -1,38 +1,36 @@
-import { NatsService } from "@fbt/nats";
+import { NatsServiceWorker } from "@fbt/nats";
 import { Logger } from "@logtape/logtape";
 import { ListAccountsForBrokerOperation } from "@fbt/accounts/operations";
 import { TopstepAccountsService } from "./TopstepAccountsService.js";
 
-const operations = [ListAccountsForBrokerOperation];
-
 export class TopstepAccountsServiceWorker {
   constructor(
-    private accountsService: TopstepAccountsService,
-    private nats: NatsService,
     private logger: Logger,
+    private service: string,
+    private version: string,
+    private natsServiceWorker: NatsServiceWorker,
+    private accountsService: TopstepAccountsService,
   ) {}
 
   async start() {
     this.logger.info("start");
 
-    this.subscribeOperations();
-  }
-
-  async subscribeOperations() {
-    this.logger.info("subscribeOperations", {
-      operations: operations.map((o) => `${o.subject} -> ${o.method}`),
-    });
-
-    for await (const operation of operations) {
-      this.nats.subscribeOperation(
-        operation,
-        {},
-        // @ts-expect-error
-        async (request) => {
-          // @ts-expect-error
-          return this.accountsService[operation.method](request);
-        },
-      );
-    }
+    await this.natsServiceWorker.addService(
+      {
+        name: `fbt.accounts`,
+        version: this.version,
+        description: `${this.service} v${this.version}`,
+        metadata: { serviceLevel: "1" },
+      },
+      [
+        this.natsServiceWorker.handler(
+          ListAccountsForBrokerOperation,
+          { operationLevel: "2" },
+          async ({ params }) => {
+            return this.accountsService.listAccountsForBroker(params);
+          },
+        ),
+      ],
+    );
   }
 }

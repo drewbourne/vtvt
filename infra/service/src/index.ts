@@ -1,1 +1,2 @@
-export * from "./operation/ServiceOperation.js";
+export * from "./ServiceDescriptor.js";
+export * from "./ServiceOperation.js";

@@ -20,13 +20,14 @@ export class NatsClient {
     private natsConnection: Promise<NatsConnection>,
     private natsTracer: NatsTracer,
   ) {
-    this.natsConnection.finally(() => {
-      // FIXME why isn't the info showing?
-      this.logger.debug("connected", { ...this.nc?.info });
+    this.natsConnection.then((nc) => {
+      this.logger.debug("connected", { ...nc.info });
     });
   }
 
   async connect(): Promise<NatsConnection> {
+    this.logger.debug("connecting");
+
     this.nc = await this.natsConnection;
 
     if (!this.nc) throw new Error(`Unable to connect to NATS`);

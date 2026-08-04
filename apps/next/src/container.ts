@@ -11,6 +11,7 @@ import { AccountsServiceClient } from "@fbt/accounts";
 import { WatchlistServiceClient } from "@fbt/watchlist";
 import { InstrumentsServiceClient } from "@fbt/market";
 import { trace } from "@opentelemetry/api";
+import { registerOtel } from "@fbt/otel/awilix";
 
 const service = process.env.npm_package_name ?? "unknown";
 const version = process.env.npm_package_version ?? "0.0.1";
@@ -39,6 +40,7 @@ export const appContainer = container.register({
 
   // dependencies
   ...registerLogger(),
+  ...registerOtel(),
   ...registerNats(),
   tracer: asValue(trace.getTracer(service)),
 });

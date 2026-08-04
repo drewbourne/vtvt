@@ -17,7 +17,7 @@ import {
   ListInstrumentsForBrokerRequest,
 } from "../operations/ListInstrumentsForBrokerOperation.js";
 import { NatsService } from "@fbt/nats";
-import { Instrument } from "../models/Instrument.js";
+import { RequestStrategy } from "nats";
 
 const filterOps = {
   // string
@@ -55,7 +55,7 @@ export class InstrumentsService {
       brokerRequest,
       ListInstrumentsForBrokerOperation,
       {
-        strategy: "count",
+        strategy: RequestStrategy.Count,
         // FIXME should based on the number of registered brokers
         maxMessages: 1,
         maxWait: 5_000,

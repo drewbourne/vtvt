@@ -1,40 +1,36 @@
-import { NatsService } from "@fbt/nats";
+import { NatsServiceWorker } from "@fbt/nats";
 import { Logger } from "@logtape/logtape";
 import { SystemService } from "./SystemService.js";
-
-const operations = [];
-
-const events = [];
+import { ListServicesOperation } from "../operations/ListServicesOperation.js";
 
 export class SystemServiceWorker {
   constructor(
     private logger: Logger,
-    private nats: NatsService,
-    private system: SystemService,
+    private service: string,
+    private version: string,
+    private natsServiceWorker: NatsServiceWorker,
+    private systemService: SystemService,
   ) {}
 
   async start() {
     this.logger.debug("start");
 
-    // this.subscribeOperations();
-
-    this.scheduleEvents();
-  }
-
-  //   async subscribeOperations() {}
-
-  async scheduleEvents() {
-    setInterval(this.tick.bind(this), 1_000);
-  }
-
-  async tick() {
-    // this.nats.publishEvent(eventDef, {});
-
-    this.nats.publish(
-      "fbt.system.event.tick",
-      JSON.stringify({
-        time: new Date().toISOString(),
-      }),
+    await this.natsServiceWorker.addService(
+      {
+        name: "fbt.system",
+        version: this.version,
+        description: `${this.service} v${this.version}`,
+        metadata: {},
+      },
+      [
+        this.natsServiceWorker.handler(
+          ListServicesOperation,
+          {},
+          async ({ params }) => {
+            return await this.systemService.listServices(params);
+          },
+        ),
+      ],
     );
   }
 }
