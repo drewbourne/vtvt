@@ -1,5 +1,7 @@
 import { createSSEHandler } from "use-next-sse";
 
+export const runtime = "nodejs";
+
 export const dynamic = "force-dynamic";
 
 export const GET = createSSEHandler((send, close) => {

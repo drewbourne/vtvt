@@ -19,7 +19,7 @@ export class InstrumentsServiceWorker {
 
     await this.natsServiceWorker.addService(
       {
-        name: `fbt.accounts`,
+        name: `FBT_MARKET_INSTRUMENTS`,
         version: this.version,
         description: `${this.service} v${this.version}`,
         metadata: { serviceLevel: "1" },

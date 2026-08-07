@@ -19,7 +19,7 @@ export class WatchlistServiceWorker {
 
     await this.natsServiceWorker.addService(
       {
-        name: `fbt.watchlist`,
+        name: `FBT_WATCHLIST`,
         version: this.version,
         description: `${this.service} v${this.version}`,
         metadata: {},

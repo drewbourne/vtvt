@@ -27,11 +27,22 @@ export class WatchlistService {
 
     try {
       const rows = await sql`
-        SELECT (accountId, symbol, brokerId, brokerSymbolId)
+        SELECT accountId, symbol, brokerId, brokerSymbolId
         FROM watchlist_symbols
         WHERE accountId=${request.accountId}`;
 
-      const items = rows.map((row) => Watchlist.parse(row));
+      this.logger.debug("rows", { rows });
+
+      const parsed = rows.map((row) => Watchlist.safeParse(row));
+
+      const items = parsed
+        .filter((result) => result.success)
+        .map((result) => result.data);
+
+      const itemsWithErrors = parsed.filter((result) => !result.success);
+      this.logger.error("items with errors were excluded from results", {
+        itemsWithErrors,
+      });
 
       const result: GetWatchlistForAccountResult = {
         status: "success",

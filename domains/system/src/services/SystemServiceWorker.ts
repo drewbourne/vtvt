@@ -17,7 +17,7 @@ export class SystemServiceWorker {
 
     await this.natsServiceWorker.addService(
       {
-        name: "fbt.system",
+        name: "FBT_SYSTEM",
         version: this.version,
         description: `${this.service} v${this.version}`,
         metadata: {},

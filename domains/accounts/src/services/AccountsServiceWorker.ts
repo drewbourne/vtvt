@@ -8,8 +8,8 @@ export class AccountsServiceWorker {
     private logger: Logger,
     private service: string,
     private version: string,
-    private accountsService: AccountsService,
     private natsServiceWorker: NatsServiceWorker,
+    private accountsService: AccountsService,
   ) {}
 
   async start() {
@@ -17,7 +17,7 @@ export class AccountsServiceWorker {
 
     await this.natsServiceWorker.addService(
       {
-        name: `fbt.accounts`,
+        name: `FBT_ACCOUNTS`,
         version: this.version,
         description: `${this.service} v${this.version}`,
         metadata: { serviceLevel: "1" },

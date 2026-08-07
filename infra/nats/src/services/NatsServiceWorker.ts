@@ -7,7 +7,7 @@ import {
 } from "@fbt/service";
 import { NatsClient } from "./NatsClient.js";
 import * as z from "zod";
-import { Msg, NatsError, Service, ServiceHandler } from "nats";
+import { Msg, NatsConnection, NatsError, Service, ServiceHandler } from "nats";
 import { NatsTracer } from "./NatsTracer.js";
 import { Span } from "@opentelemetry/api";
 
@@ -21,6 +21,7 @@ type NatsServiceOperationHandler<
 > = {
   (input: {
     error: NatsError | null;
+    nc: NatsConnection;
     msg: Msg;
     span: Span;
     operation: O;
@@ -125,9 +126,10 @@ export class NatsServiceWorker {
 
       handlerLogger.debug("adding endpoint");
 
-      svc.addEndpoint(entry.operation.subject, {
+      svc.addEndpoint(entry.operation.method, {
+        subject: entry.operation.subject,
         metadata: entry.metadata,
-        handler: this.createHandler(entry, svc, handlerLogger),
+        handler: this.createHandler(entry, nc, svc, handlerLogger),
       });
     }
   }
@@ -166,6 +168,7 @@ export class NatsServiceWorker {
 
   protected createHandler(
     entry: NatsServiceOperationEntry,
+    nc: NatsConnection,
     svc: Service,
     logger: Logger,
   ): ServiceHandler {
@@ -194,6 +197,7 @@ export class NatsServiceWorker {
             const params = entry.operation.params.parse(data);
 
             const res = await entry.handler({
+              nc,
               error,
               msg,
               span,

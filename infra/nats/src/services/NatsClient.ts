@@ -112,7 +112,7 @@ export class NatsClient {
     opts: SubscriptionOptions,
     handler: (msg: Msg) => Promise<void>,
   ) {
-    this.natsTracer.withSpan(
+    return this.natsTracer.withSpan(
       { operation: "subscribe", subject, opts },
       async (span) => {
         await this.connect();

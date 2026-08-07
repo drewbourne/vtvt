@@ -14,6 +14,8 @@ import { InstrumentsService } from "./instruments/services/InstrumentsService.js
 import { InstrumentsServiceWorker } from "./instruments/services/InstrumentsServiceWorker.js";
 import { registerOtel } from "@fbt/otel/awilix";
 import { OtelService } from "@fbt/otel";
+import { LivePricesService } from "./live/services/LivePricesService.js";
+import { LivePriceServiceWorker } from "./live/services/LivePricesServiceWorker.js";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -27,6 +29,10 @@ export const marketContainer = container.register({
   instrumentsService: asClass(InstrumentsService, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "instruments" }),
+  }),
+  livePricesService: asClass(LivePricesService, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "livePrices" }),
   }),
 
   // dependencies
@@ -45,5 +51,9 @@ export const marketWorkerContainer = marketContainer.createScope().register({
   instrumentsWorker: asClass(InstrumentsServiceWorker, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "instrumentsWorker" }),
+  }),
+  livePricesWorker: asClass(LivePriceServiceWorker, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "livePricesWorker" }),
   }),
 });

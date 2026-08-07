@@ -1,8 +1,9 @@
 import { configureLogging } from "@fbt/logging";
 import { Account, AccountId, BrokerId } from "@fbt/accounts/models";
 import { webContainer } from "./container.js";
-import { BrokerSymbolId, Symbol } from "@fbt/market/models";
+import { BrokerSymbolId, Instrument, Symbol } from "@fbt/market/models";
 import { SpanKind, trace } from "@opentelemetry/api";
+import { Watchlist } from "@fbt/watchlist/models";
 
 const { loggerBase: logger, service, version } = webContainer.cradle;
 
@@ -15,18 +16,32 @@ async function main() {
     await configureLogging({ service });
 
     // FIXME wait for services to announce liveness, readiness
-    // logger.debug("waiting for services to start...");
-    // await new Promise((resolve) => setTimeout(resolve, 5_000));
+    logger.debug("waiting for services to start...");
+    await new Promise((resolve) => setTimeout(resolve, 5_000));
 
-    await checkClients();
-
+    // await checkClients();
     // await checkSystem();
 
-    // const accounts = await checkAccounts();
+    await checkServices();
+
+    const accounts = await checkAccounts();
+    if (accounts.count === 0) {
+      logger.error("no accounts");
+      process.exit(1);
+    }
+
+    const account = accounts.items[0];
+    if (!account) {
+      logger.error("no account", account);
+      process.exit(1);
+    }
 
     // const watchlist = await checkWatchlists(account);
 
-    // await checkInstruments();
+    const instruments = await checkInstruments();
+    if (instruments.status === "success" && instruments.items.length > 0) {
+      await checkPricesForInstrument(instruments.items[0]!);
+    }
   });
 }
 
@@ -53,30 +68,34 @@ async function checkClients() {
   });
 }
 
-async function checkSystem() {
-  tracer.startActiveSpan("checkSystem", async () => {
+async function checkSystem() {}
+
+async function checkServices() {
+  return tracer.startActiveSpan("checkServices", async () => {
     const { nats } = webContainer.cradle;
 
     const nc = await nats.connect();
     const sc = nc.services.client();
 
+    logger.info("checking services");
+
     let iter = await sc.ping();
     logger.debug("results from PING");
     for await (const si of iter) {
-      logger.debug({ ...si });
+      logger.debug("PING", { ...si });
     }
 
-    iter = await sc.info();
-    logger.debug("results from INFO");
-    for await (const i of iter) {
-      logger.debug({ ...i });
-    }
+    // iter = await sc.info();
+    // logger.debug("results from INFO");
+    // for await (const i of iter) {
+    //   logger.debug("INFO", { ...i });
+    // }
 
-    iter = await sc.stats();
-    logger.debug("results from STATS");
-    for await (const si of iter) {
-      logger.debug({ ...si });
-    }
+    // iter = await sc.stats();
+    // logger.debug("results from STATS");
+    // for await (const si of iter) {
+    //   logger.debug("STATS", { ...si });
+    // }
   });
 }
 
@@ -99,10 +118,15 @@ async function checkWatchlists(account: Account) {
   logger.info("checkWatchlists start");
 
   const { watchlistClient } = webContainer.cradle;
-  let watchlist = await watchlistClient.getWatchlistForAccount({
+  let result = await watchlistClient.getWatchlistForAccount({
     accountId: account.id,
   });
-  logger.info("watchlist", watchlist);
+
+  logger.info("watchlist", result);
+
+  if (result.status === "success") {
+    return result;
+  }
 
   // watchlistClient.addSymbolToWatchlist({
   //   accountId: account.id,
@@ -115,7 +139,7 @@ async function checkWatchlists(account: Account) {
   // });
   // logger.info("watchlist", watchlist);
 
-  return watchlist;
+  return null;
 }
 
 async function checkInstruments() {
@@ -132,4 +156,19 @@ async function checkInstruments() {
   logger.info("instruments", instruments);
 
   return instruments;
+}
+
+async function checkPricesForInstrument(instrument: Instrument) {
+  logger.info("checkPricesForInstrument start");
+
+  const { livePricesClient } = webContainer.cradle;
+
+  await livePricesClient.subscribeQuotesForInstrument(
+    {
+      instrument,
+    },
+    async ({ quote }) => {
+      logger.info("checkPricesForInstrument quote", { quote });
+    },
+  );
 }

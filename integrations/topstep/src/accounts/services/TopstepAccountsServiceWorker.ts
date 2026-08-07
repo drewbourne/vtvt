@@ -17,7 +17,7 @@ export class TopstepAccountsServiceWorker {
 
     await this.natsServiceWorker.addService(
       {
-        name: `fbt.accounts`,
+        name: `FBT_TOPSTEP_ACCOUNTS`,
         version: this.version,
         description: `${this.service} v${this.version}`,
         metadata: { serviceLevel: "1" },

@@ -40,6 +40,10 @@ async function main() {
   logger.info("instrumentsWorker started");
 
   // market
+  const { livePricesWorker } = topstepWorkerContainer.cradle;
+  logger.info("livePricesWorker starting");
+  await livePricesWorker.start();
+  logger.info("livePricesWorker started");
 
   // trading
 }

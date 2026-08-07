@@ -1,33 +1,36 @@
 import { NatsServiceWorker } from "@fbt/nats";
 import { Logger } from "@logtape/logtape";
-import { ListInstrumentsForBrokerOperation } from "@fbt/market/operations";
-import { TopstepInstrumentsService } from "./TopstepInstrumentsService.js";
+import { LivePricesService } from "./LivePricesService.js";
+import { SubscribeQuotesForInstrumentOperation } from "../operations/SubscribeQuotesForInstrumentOperation.js";
 
-export class TopstepInstrumentsServiceWorker {
+export class LivePriceServiceWorker {
   constructor(
     private logger: Logger,
     private service: string,
     private version: string,
     private natsServiceWorker: NatsServiceWorker,
-    private instrumentsService: TopstepInstrumentsService,
+    private livePricesService: LivePricesService,
   ) {}
 
   async start() {
-    this.logger.info("start");
+    this.logger.debug("start");
 
     await this.natsServiceWorker.addService(
       {
-        name: `FBT_TOPSTEP_INSTRUMENTS`,
+        name: "FBT_MARKET_LIVE_PRICES",
         version: this.version,
         description: `${this.service} v${this.version}`,
-        metadata: { serviceLevel: "1" },
+        metadata: {},
       },
       [
         this.natsServiceWorker.handler(
-          ListInstrumentsForBrokerOperation,
-          { operationLevel: "2" },
+          SubscribeQuotesForInstrumentOperation,
+          {},
           async ({ params }) => {
-            return this.instrumentsService.listInstrumentsForBroker(params);
+            return this.livePricesService.subscribeQuotesForInstrument(
+              params,
+              {},
+            );
           },
         ),
       ],

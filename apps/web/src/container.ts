@@ -11,7 +11,7 @@ import {
 import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { AccountsServiceClient } from "@fbt/accounts";
 import { WatchlistServiceClient } from "@fbt/watchlist";
-import { InstrumentsServiceClient } from "@fbt/market";
+import { InstrumentsServiceClient, LivePricesServiceClient } from "@fbt/market";
 import { registerOtel } from "@fbt/otel/awilix";
 import { OtelService } from "@fbt/otel";
 
@@ -31,6 +31,10 @@ export const webContainer = container.register({
   instrumentsClient: asClass(InstrumentsServiceClient, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "instruments" }),
+  }),
+  livePricesClient: asClass(LivePricesServiceClient, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "livePrices" }),
   }),
   watchlistClient: asClass(WatchlistServiceClient, {
     injectionMode: InjectionMode.CLASSIC,

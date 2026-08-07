@@ -17,6 +17,9 @@ import { TopstepInstrumentsServiceWorker } from "./instruments/services/TopstepI
 import { TopstepInstrumentsService } from "./instruments/services/TopstepInstrumentsService.js";
 import { registerOtel } from "@fbt/otel/awilix";
 import { OtelService } from "@fbt/otel";
+import { TopstepMarketHubClient } from "./market/services/TopstepMarketHubClient.js";
+import { TopstepLivePricesService } from "./market/services/TopstepLivePricesService.js";
+import { TopstepLivePricesServiceWorker } from "./market/services/TopstepLivePricesServiceWorker.js";
 
 const container = createContainer({
   injectionMode: InjectionMode.PROXY,
@@ -48,6 +51,14 @@ export const topstepContainer = container.register({
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "instruments" }),
   }),
+  livePricesService: asClass(TopstepLivePricesService, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "livePricesService" }),
+  }),
+  marketHub: asClass(TopstepMarketHubClient, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "marketHub" }),
+  }),
 
   // dependencies
   ...registerLogger(),
@@ -66,5 +77,9 @@ export const topstepWorkerContainer = topstepContainer.createScope().register({
   instrumentsWorker: asClass(TopstepInstrumentsServiceWorker, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "instrumentsWorker" }),
+  }),
+  livePricesWorker: asClass(TopstepLivePricesServiceWorker, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "livePricesWorker" }),
   }),
 });

@@ -10,6 +10,11 @@ async function main() {
   logger.info("instrumentsWorker starting");
   await instrumentsWorker.start();
   logger.info("instrumentsWorker started");
+
+  const { livePricesWorker } = marketWorkerContainer.cradle;
+  logger.info("livePricesWorker starting");
+  await livePricesWorker.start();
+  logger.info("livePricesWorker started");
 }
 
 main().catch((error) => logger.error(error));
