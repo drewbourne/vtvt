@@ -1,5 +1,5 @@
-import { appContainer, AppCradle } from "@/container";
-import { Context, runWithContexts } from "@fbt/context";
+import { appContainer } from "@/container";
+import { Context } from "@fbt/context";
 import { Attributes, SpanStatusCode } from "@opentelemetry/api";
 import { asValue, InferCradleFromContainer } from "awilix";
 
@@ -22,14 +22,18 @@ const actionContext = new ActionContext({});
 function createActionContainer(
   name: string,
   parent: { depth: number } = { depth: -1 },
+  params: unknown[] = [],
 ) {
   const actionContainer = appContainer.createScope().register({
     root: asValue(parent.depth === -1 ? true : false),
     depth: asValue(parent.depth === -1 ? 0 : parent.depth + 1),
     logger: asValue(appContainer.resolve("loggerBase").getChild(name)),
+    actionParams: asValue(params),
+    ...(params?.[0] instanceof Request ? { request: asValue(params[0]) } : {}),
   });
 
   const { logger, root, depth } = actionContainer.cradle;
+
   logger.debug("createActionContainer", { root, depth, name });
 
   return actionContainer;
@@ -69,7 +73,7 @@ export function runAction<Params extends unknown[], Result extends unknown>(
   return async (...params: Params) => {
     let parent = actionContext.get("container");
 
-    let container = createActionContainer(options.name, parent?.cradle);
+    let container = createActionContainer(options.name, parent?.cradle, params);
 
     const { tracer, logger } = container.cradle;
 

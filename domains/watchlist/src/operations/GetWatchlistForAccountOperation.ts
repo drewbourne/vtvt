@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { serviceOperation } from "@fbt/service";
 import { AccountId } from "@fbt/accounts/models";
-import { Watchlist } from "../models/Watchlist.js";
+import { WatchlistEntry } from "../models/WatchlistEntry.js";
 
 export const GetWatchlistForAccountRequest = z.object({
   accountId: AccountId,
@@ -15,7 +15,7 @@ export const GetWatchlistForAccountResult = z.discriminatedUnion("status", [
   z.object({
     status: z.literal("success"),
     count: z.number(),
-    items: z.array(Watchlist),
+    items: z.array(WatchlistEntry),
   }),
   z.object({
     status: z.literal("failure"),

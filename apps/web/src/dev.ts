@@ -36,11 +36,14 @@ async function main() {
       process.exit(1);
     }
 
-    // const watchlist = await checkWatchlists(account);
-
     const instruments = await checkInstruments();
+
     if (instruments.status === "success" && instruments.items.length > 0) {
-      await checkPricesForInstrument(instruments.items[0]!);
+      const instrument = instruments.items[0]!;
+
+      // await addInstrumentToWatchlist(account, instrument);
+
+      await checkPricesForInstrument(instrument);
     }
   });
 }
@@ -127,13 +130,22 @@ async function checkWatchlists(account: Account) {
   if (result.status === "success") {
     return result;
   }
+}
 
-  // watchlistClient.addSymbolToWatchlist({
-  //   accountId: account.id,
-  //   symbol: Symbol.parse("MNQ"),
-  //   brokerId: account.brokerId,
-  //   brokerSymbolId: BrokerSymbolId.parse("CON.F.US.MNQ.U6"),
-  // });
+async function addInstrumentToWatchlist(
+  account: Account,
+  instrument: Instrument,
+) {
+  const { watchlistClient } = webContainer.cradle;
+
+  watchlistClient.addSymbolToWatchlist({
+    accountId: account.id,
+    instrumentId: instrument.id,
+    symbol: instrument.symbol,
+    brokerId: instrument.brokerId,
+    brokerSymbolId: instrument.brokerSymbolId,
+  });
+
   // watchlist = await watchlistClient.getWatchlistForAccount({
   //   accountId: account.id,
   // });

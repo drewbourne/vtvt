@@ -30,15 +30,15 @@ export class AccountsService {
 
     const items = responses.flatMap((r) => r.items);
 
-    const result = {
+    const result: ListAccountsResult = {
+      status: "success",
       count: items.length,
       items,
     };
 
     this.logger.debug("listAccounts", {
       request,
-      responses: responses.length,
-      items: items.length,
+      result,
     });
 
     return result;

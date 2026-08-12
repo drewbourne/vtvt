@@ -1,8 +1,13 @@
 "use client";
 
-import { sva } from "@styled-system/css";
-import { createContext, PropsWithChildren, useContext } from "react";
-// import { createSvaContext } from "../panda/createSvaContext";
+import { cx, sva, RecipeVariantProps } from "@styled-system/css";
+import {
+  createContext,
+  PropsWithChildren,
+  TdHTMLAttributes,
+  ThHTMLAttributes,
+  useContext,
+} from "react";
 
 const table = sva({
   className: "table",
@@ -13,6 +18,7 @@ const table = sva({
     },
     table: {
       width: "100%",
+      tableLayout: "fixed",
     },
     thead: {},
     tbody: {},
@@ -24,8 +30,14 @@ const table = sva({
         borderBottomWidth: "thin",
       },
     },
-    th: {},
-    td: {},
+    th: {
+      paddingBlock: "1",
+      paddingInline: "2",
+    },
+    td: {
+      paddingBlock: "1",
+      paddingInline: "2",
+    },
   },
 });
 
@@ -37,7 +49,49 @@ const row = sva({
 const cell = sva({
   className: "cell",
   slots: ["cell"],
+  variants: {
+    cellKind: {
+      action: {
+        cell: {
+          textAlign: "center",
+        },
+      },
+      broker: {
+        cell: {
+          textAlign: "left",
+          width: "120px",
+        },
+      },
+      number: {
+        cell: {
+          width: "120px",
+          textAlign: "right",
+          fontVariantNumeric: "tabular-nums",
+        },
+      },
+      price: {
+        cell: {
+          width: "120px",
+          textAlign: "right",
+          fontVariantNumeric: "tabular-nums",
+        },
+      },
+      symbol: {
+        cell: {
+          textAlign: "left",
+          fontWeight: "bolder",
+        },
+      },
+      text: {
+        cell: {
+          textAlign: "left",
+        },
+      },
+    },
+  },
 });
+
+type CellProps = RecipeVariantProps<typeof cell>;
 
 const TableSvaContext = createContext<ReturnType<typeof table>>({});
 const useTableSva = () => useContext(TableSvaContext);
@@ -85,14 +139,37 @@ export function Tr({ children }: PropsWithChildren) {
   return <tr className={classes.tr}>{children}</tr>;
 }
 
-export function Th({ children }: PropsWithChildren) {
-  const classes = useTableSva();
+export function Th({
+  children,
+  className,
+  cellKind,
+  ...props
+}: PropsWithChildren & ThHTMLAttributes<HTMLTableCellElement> & CellProps) {
+  const tableClasses = useTableSva();
+  const cellClasses = cell({ cellKind });
 
-  return <th className={classes.th}>{children}</th>;
+  return (
+    <th
+      className={cx(tableClasses.th, cellClasses?.cell, className)}
+      {...props}
+    >
+      {children}
+    </th>
+  );
 }
 
-export function Td({ children }: PropsWithChildren) {
-  const classes = useTableSva();
+export function Td({
+  children,
+  className,
+  cellKind,
+  ...props
+}: PropsWithChildren & TdHTMLAttributes<HTMLTableCellElement> & CellProps) {
+  const tableClasses = useTableSva();
+  const cellClasses = cell({ cellKind });
 
-  return <td className={classes.td}>{children}</td>;
+  return (
+    <td className={cx(tableClasses.td, cellClasses.cell, className)} {...props}>
+      {children}
+    </td>
+  );
 }

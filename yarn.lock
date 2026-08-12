@@ -731,10 +731,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@fbt/next@workspace:apps/next"
   dependencies:
+    "@fbt/accounts": "workspace:*"
     "@fbt/context": "workspace:*"
     "@fbt/logging": "workspace:*"
+    "@fbt/market": "workspace:*"
     "@fbt/nats": "workspace:*"
     "@fbt/otel": "workspace:*"
+    "@fbt/watchlist": "workspace:*"
     "@logtape/logtape": "npm:^2.2.4"
     "@opentelemetry/api": "npm:^1.9.1"
     "@opentelemetry/api-logs": "npm:^0.221.0"

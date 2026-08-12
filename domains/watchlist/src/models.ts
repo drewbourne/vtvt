@@ -1,1 +1,1 @@
-export * from "./models/Watchlist.js";
+export * from "./models/WatchlistEntry.js";

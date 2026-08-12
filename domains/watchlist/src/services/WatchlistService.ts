@@ -12,7 +12,7 @@ import {
   RemoveSymbolFromWatchlistResult,
 } from "../operations/RemoveSymbolFromWatchlistOperation.js";
 import { QuestService } from "@fbt/quest";
-import { Watchlist } from "../models.js";
+import { WatchlistEntry } from "../models/WatchlistEntry.js";
 
 export class WatchlistService {
   constructor(
@@ -27,13 +27,13 @@ export class WatchlistService {
 
     try {
       const rows = await sql`
-        SELECT accountId, symbol, brokerId, brokerSymbolId
-        FROM watchlist_symbols
+        SELECT accountId, instrumentId, symbol, brokerId, brokerSymbolId
+        FROM watchlist_entries
         WHERE accountId=${request.accountId}`;
 
       this.logger.debug("rows", { rows });
 
-      const parsed = rows.map((row) => Watchlist.safeParse(row));
+      const parsed = rows.map((row) => WatchlistEntry.safeParse(row));
 
       const items = parsed
         .filter((result) => result.success)
@@ -71,8 +71,9 @@ export class WatchlistService {
       const sender = await this.quest.createSender();
 
       sender
-        .table("watchlist_symbols")
+        .table("watchlist_entries")
         .symbol("accountId", request.accountId)
+        .symbol("instrumentId", request.instrumentId)
         .symbol("symbol", request.symbol)
         .symbol("brokerId", request.brokerId)
         .symbol("brokerSymbolId", request.brokerSymbolId)
@@ -99,8 +100,9 @@ export class WatchlistService {
 
     try {
       await sql`
-        DELETE FROM watchlist_symbols 
+        DELETE FROM watchlist_entries 
         WHERE accountId=${request.accountId} 
+          AND instrumentId=${request.instrumentId}
           AND symbol=${request.symbol}
           AND brokerId=${request.brokerId}
         LIMIT 1

@@ -9,7 +9,7 @@ import {
 import { registerLogger, injectLogger } from "@fbt/logging/awilix";
 import { AccountsServiceClient } from "@fbt/accounts";
 import { WatchlistServiceClient } from "@fbt/watchlist";
-import { InstrumentsServiceClient } from "@fbt/market";
+import { InstrumentsServiceClient, LivePricesServiceClient } from "@fbt/market";
 import { trace } from "@opentelemetry/api";
 import { registerOtel } from "@fbt/otel/awilix";
 
@@ -32,6 +32,10 @@ export const appContainer = container.register({
   instrumentsClient: asClass(InstrumentsServiceClient, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "instruments" }),
+  }),
+  livePricesClient: asClass(LivePricesServiceClient, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "livePrices" }),
   }),
   watchlistClient: asClass(WatchlistServiceClient, {
     injectionMode: InjectionMode.CLASSIC,

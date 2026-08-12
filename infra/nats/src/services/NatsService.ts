@@ -188,8 +188,6 @@ export class NatsService {
             parentContext,
           },
           async () => {
-            this.logger.debug(`handler`, { subject, opts });
-
             try {
               await handler(msg);
             } catch (error) {

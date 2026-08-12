@@ -1,10 +1,11 @@
 import * as z from "zod";
 import { serviceOperation } from "@fbt/service";
 import { AccountId, BrokerId } from "@fbt/accounts/models";
-import { Symbol, BrokerSymbolId } from "@fbt/market/models";
+import { Symbol, BrokerSymbolId, InstrumentId } from "@fbt/market/models";
 
 export const RemoveSymbolFromWatchlistRequest = z.object({
   accountId: AccountId,
+  instrumentId: InstrumentId,
   symbol: Symbol,
   brokerId: BrokerId,
   brokerSymbolId: BrokerSymbolId,

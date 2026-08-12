@@ -3,23 +3,25 @@ import { serviceOperation } from "@fbt/service";
 import { Account } from "../models/Account.js";
 
 export const ListAccountsRequest = z.object({
-  filters: z.object({}),
-  sorts: z.object({}),
-  limit: z.number(),
-  offset: z.number(),
+  filters: z.object({}).optional(),
+  sorts: z.object({}).optional(),
+  limit: z.number().optional(),
+  offset: z.number().optional(),
 });
 
 export type ListAccountsRequest = z.infer<typeof ListAccountsRequest>;
 
-export const ListAccountsResult = z.object({
-  count: z.number(),
-  items: z.array(Account),
-});
-
-// export const Result = z.discriminatedUnion("status", [
-//     z.object({ status: z.literal('success'), result: ... }),
-//     z.object({ status: z.literal('error'), error: z.any() }),
-// ])
+export const ListAccountsResult = z.discriminatedUnion("status", [
+  z.object({
+    status: z.literal("success"),
+    count: z.number(),
+    items: z.array(Account),
+  }),
+  z.object({
+    status: z.literal("error"),
+    error: z.any(),
+  }),
+]);
 
 export type ListAccountsResult = z.infer<typeof ListAccountsResult>;
 

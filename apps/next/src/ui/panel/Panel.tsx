@@ -6,12 +6,14 @@ const panel = sva({
   slots: ["root", "header", "content", "footer"],
   base: {
     root: {
+      width: '100%"',
       display: "grid",
       gridTemplateAreas: `
         "panel-header"
         "panel-content"
         "panel-footer"
       `,
+      gridTemplateColumns: "1fr",
       borderColor: "colorPalette.700",
       borderStyle: "solid",
       borderWidth: "thin",
