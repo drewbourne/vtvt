@@ -22,22 +22,37 @@ export class LivePricesServiceClient {
       msg: Msg;
     }) => Promise<void>,
   ): Promise<SubscribeQuotesForInstrumentResult> {
-    this.logger.debug("subscribeQuotesForInstrument requesting");
+    const logger = this.logger.with({
+      instrumentId: request.instrument.id,
+      brokerId: request.instrument.brokerId,
+      brokerSymbolId: request.instrument.brokerSymbolId,
+    });
+
+    logger.debug("subscribeQuotesForInstrument requesting");
 
     const result = await this.nats.requestOperation(
       request,
       SubscribeQuotesForInstrumentOperation,
     );
 
-    this.logger.debug("subscribeQuotesForInstrument", { request, result });
+    logger.debug("subscribeQuotesForInstrument", { request, result });
 
     if (result.status === "success") {
-      this.logger.debug("subscribeQuotesForInstrument subscribing");
+      logger.debug("subscribeQuotesForInstrument subscribing");
 
       this.nats.subscribe(result.subject, {}, async (msg) => {
         const data = msg.json();
-        const quote = MarketQuote.parse(data);
-        handler({ quote, msg, request });
+        const result = MarketQuote.safeParse(data, { reportInput: true });
+        if (result.success) {
+          const quote = result.data;
+          handler({ quote, msg, request });
+        } else {
+          logger.error(`Error parsing MarketQuote`, {
+            data,
+            error: result.error,
+          });
+          throw result.error;
+        }
       });
     }
 

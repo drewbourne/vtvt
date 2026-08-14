@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 import packageJson from "./package.json" with { type: "json" };
 
-const externals = [...Object.keys(packageJson.dependencies)];
+// const externals = [...Object.keys(packageJson.dependencies)];
 
 export default defineConfig({
   plugins: [dts()],
@@ -18,9 +18,9 @@ export default defineConfig({
       formats: ["es"],
     },
     outDir: "dist",
-    rolldownOptions: {
-      external: externals,
-    },
+    // rolldownOptions: {
+    //   external: externals,
+    // },
     minify: false,
     ssr: true,
   },

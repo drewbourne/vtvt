@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { VStack } from "@styled-system/jsx";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,14 +34,21 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <AppLayout>
-          <AppSidebar>
+          {/* <AppSidebar>
             <nav>Nav</nav>
-          </AppSidebar>
-          <AppHeader>AppHeader</AppHeader>
+          </AppSidebar> */}
+          {/* <AppHeader>
+            <nav>
+              <VStack>
+                <div>Trading</div>
+                <div>System</div>
+              </VStack>
+            </nav>
+          </AppHeader> */}
           <AppContent>
             <main>{children}</main>
           </AppContent>
-          <AppFooter>AppFooter</AppFooter>
+          {/* <AppFooter>AppFooter</AppFooter> */}
         </AppLayout>
       </body>
     </html>

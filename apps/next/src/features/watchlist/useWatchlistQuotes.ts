@@ -5,15 +5,17 @@ import { WatchlistEntry } from "@fbt/watchlist/models";
 import { useEffect, useState } from "react";
 import { useSSE } from "use-next-sse";
 
-export function useWatchlistQuotes(watchlistEntries: WatchlistEntry[]) {
+export function useWatchlistQuotes(watchlistEntries: WatchlistEntry[] | null) {
   const [quotes, setQuotes] = useState<Map<InstrumentId, MarketQuote>>(
     new Map(),
   );
 
   const searchParams = new URLSearchParams();
 
-  for (const entry of watchlistEntries) {
-    searchParams.append("instrumentId", entry.instrumentId);
+  if (watchlistEntries) {
+    for (const entry of watchlistEntries) {
+      searchParams.append("instrumentId", entry.instrumentId);
+    }
   }
 
   const { data, error } = useSSE({

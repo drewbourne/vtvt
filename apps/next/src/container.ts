@@ -12,6 +12,7 @@ import { WatchlistServiceClient } from "@fbt/watchlist";
 import { InstrumentsServiceClient, LivePricesServiceClient } from "@fbt/market";
 import { trace } from "@opentelemetry/api";
 import { registerOtel } from "@fbt/otel/awilix";
+import { ServicesClient } from "./features/services/ServicesClient";
 
 const service = process.env.npm_package_name ?? "unknown";
 const version = process.env.npm_package_version ?? "0.0.1";
@@ -40,6 +41,10 @@ export const appContainer = container.register({
   watchlistClient: asClass(WatchlistServiceClient, {
     injectionMode: InjectionMode.CLASSIC,
     injector: injectLogger({ name: "watchlists" }),
+  }),
+  servicesClient: asClass(ServicesClient, {
+    injectionMode: InjectionMode.CLASSIC,
+    injector: injectLogger({ name: "services" }),
   }),
 
   // dependencies

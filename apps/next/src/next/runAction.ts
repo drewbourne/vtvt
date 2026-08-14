@@ -1,7 +1,8 @@
 import { appContainer } from "@/container";
 import { Context } from "@fbt/context";
 import { Attributes, SpanStatusCode } from "@opentelemetry/api";
-import { asValue, InferCradleFromContainer } from "awilix";
+import { asClass, asValue, InferCradleFromContainer } from "awilix";
+import { NextRequest } from "next/server";
 
 type ActionContainer = ReturnType<typeof createActionContainer>;
 

@@ -5,6 +5,8 @@ export type MapCallbackFn<Key = string, Value = unknown> =
 export type MapWithCallbacksFns<Key = string, Value = unknown> = {
   onFirstAdded?: MapCallbackFn<Key, Value>;
   onFirstAddedForKey?: MapCallbackFn<Key, Value>;
+  onAdded?: MapCallbackFn<Key, Value>;
+  onRemoved?: MapCallbackFn<Key, Value>;
   onLastRemoved?: MapCallbackFn<Key, Value>;
   onLastRemovedForKey?: MapCallbackFn<Key, Value>;
 };
@@ -35,17 +37,15 @@ export class MapWithCallbacks<Key = string, Value = unknown> {
     return this.map.entries();
   }
 
+  has(key: Key): boolean {
+    return this.map.has(key);
+  }
+
   values(key: Key): Value[] {
     return [...(this.map.get(key) ?? [])];
   }
 
   async add(key: Key, value: Value) {
-    // console.log("MapWithCallbacks", {
-    //   key,
-    //   has: this.map.has(key),
-    //   size: this.map.get(key)?.length ?? "-",
-    // });
-
     if (!this.map.has(key)) {
       const isFirst = this.map.size === 0;
 
@@ -59,6 +59,8 @@ export class MapWithCallbacks<Key = string, Value = unknown> {
     } else {
       this.map.set(key, [...this.map.get(key)!, value]);
     }
+
+    await this.fns.onAdded?.(key, value);
   }
 
   async remove(key: Key, value: Value) {
@@ -68,8 +70,12 @@ export class MapWithCallbacks<Key = string, Value = unknown> {
     const nextValues = values.filter((v) => v !== value);
     if (nextValues.length > 0) {
       this.map.set(key, nextValues);
+
+      await this.fns.onRemoved?.(key, value);
     } else {
       this.map.delete(key);
+
+      await this.fns.onRemoved?.(key, value);
 
       await this.fns.onLastRemovedForKey?.(key, value);
 

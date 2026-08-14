@@ -21,7 +21,11 @@ const table = sva({
       tableLayout: "fixed",
     },
     thead: {},
-    tbody: {},
+    tbody: {
+      "&:not(:first-child)": {
+        borderTop: "1px solid red",
+      },
+    },
     tfoot: {},
     tr: {
       "& th, & td": {
@@ -33,6 +37,7 @@ const table = sva({
     th: {
       paddingBlock: "1",
       paddingInline: "2",
+      fontSize: "xs",
     },
     td: {
       paddingBlock: "1",
@@ -53,13 +58,32 @@ const cell = sva({
     cellKind: {
       action: {
         cell: {
-          textAlign: "center",
+          display: "flex",
+          justifyContent: "center",
         },
       },
       broker: {
         cell: {
           textAlign: "left",
           width: "120px",
+        },
+      },
+      date: {
+        cell: {
+          textAlign: "left",
+          fontVariantNumeric: "tabular-nums",
+        },
+      },
+      datetime: {
+        cell: {
+          textAlign: "left",
+          fontVariantNumeric: "tabular-nums",
+        },
+      },
+      time: {
+        cell: {
+          textAlign: "left",
+          fontVariantNumeric: "tabular-nums",
         },
       },
       number: {
@@ -76,16 +100,37 @@ const cell = sva({
           fontVariantNumeric: "tabular-nums",
         },
       },
+      status: {
+        cell: {
+          textAlign: "center",
+          verticalAlign: "center",
+        },
+      },
       symbol: {
         cell: {
           textAlign: "left",
           fontWeight: "bolder",
+          width: "120px",
         },
       },
       text: {
         cell: {
           textAlign: "left",
         },
+      },
+    },
+    cellWidth: {
+      auto: {
+        cell: { width: "auto" },
+      },
+      lg: {
+        cell: { width: "50%" },
+      },
+      md: {
+        cell: { width: "100px" },
+      },
+      sm: {
+        cell: { width: "50px" },
       },
     },
   },
@@ -143,10 +188,11 @@ export function Th({
   children,
   className,
   cellKind,
+  cellWidth,
   ...props
 }: PropsWithChildren & ThHTMLAttributes<HTMLTableCellElement> & CellProps) {
   const tableClasses = useTableSva();
-  const cellClasses = cell({ cellKind });
+  const cellClasses = cell({ cellKind, cellWidth });
 
   return (
     <th
@@ -162,10 +208,11 @@ export function Td({
   children,
   className,
   cellKind,
+  cellWidth,
   ...props
 }: PropsWithChildren & TdHTMLAttributes<HTMLTableCellElement> & CellProps) {
   const tableClasses = useTableSva();
-  const cellClasses = cell({ cellKind });
+  const cellClasses = cell({ cellKind, cellWidth });
 
   return (
     <td className={cx(tableClasses.td, cellClasses.cell, className)} {...props}>

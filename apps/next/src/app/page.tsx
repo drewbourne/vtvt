@@ -1,38 +1,31 @@
-import Counter from "@/counter/Counter";
+import { getActiveAccount } from "@/features/accounts/getActiveAccount";
 import { AccountsPanel } from "@/features/accounts/AccountsPanel";
+import { InstrumentsPanel } from "@/features/instruments/InstrumentsPanel";
+import { ServicesPanel } from "@/features/services/ServicesPanel";
 import { WatchlistPanel } from "@/features/watchlist/WatchlistPanel";
 import { runAction } from "@/next/runAction";
 import { VStack } from "@styled-system/jsx";
 
-const Home = runAction(
-  { name: "GET /" },
-  ({ accountsClient, watchlistClient }) =>
-    async () => {
-      const accountsResult = await accountsClient.listAccounts({});
-      if (accountsResult.status !== "success") {
-        return <VStack>Error: listAccounts</VStack>;
-      }
+type HomeProps = {
+  searchParams?: Promise<{ instrumentSearchTerm?: string }>;
+};
 
-      const account = accountsResult.items[0];
-      if (!account) {
-        return <VStack>No Accounts</VStack>;
-      }
+const Home = async (props: HomeProps) => {
+  const account = await getActiveAccount();
 
-      const watchlistResult = await watchlistClient.getWatchlistForAccount({
-        accountId: account?.id,
-      });
-      if (watchlistResult.status !== "success") {
-        return <VStack>Error: getWatchlistForAccount</VStack>;
-      }
+  const searchParams = await props.searchParams;
 
-      return (
-        <VStack gap="1" alignItems="stretch">
-          {/* <Counter /> */}
-          <AccountsPanel accounts={accountsResult.items} />
-          <WatchlistPanel entries={watchlistResult.items} />
-        </VStack>
-      );
-    },
-);
+  return (
+    <VStack gap="1" alignItems="stretch">
+      <AccountsPanel />
+      <WatchlistPanel account={account} />
+      <InstrumentsPanel
+        account={account}
+        searchTerm={searchParams?.instrumentSearchTerm}
+      />
+      <ServicesPanel />
+    </VStack>
+  );
+};
 
 export default Home;

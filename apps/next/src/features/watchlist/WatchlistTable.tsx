@@ -1,14 +1,17 @@
+"use client";
+
 import { Price } from "@/ui/price/Price";
 import { Table, TableLayout, Tbody, Td, Th, Thead, Tr } from "@/ui/table/Table";
-import { InstrumentId, MarketQuote } from "@fbt/market/models";
 import { WatchlistEntry } from "@fbt/watchlist/models";
+import { useWatchlistQuotes } from "./useWatchlistQuotes";
 
 export interface WatchlistTableProps {
-  entries: WatchlistEntry[];
-  quotes: Map<InstrumentId, MarketQuote>;
+  watchlist: WatchlistEntry[];
 }
 
-export function WatchlistTable({ entries, quotes }: WatchlistTableProps) {
+export function WatchlistTable({ watchlist }: WatchlistTableProps) {
+  const quotes = useWatchlistQuotes(watchlist);
+
   return (
     <TableLayout>
       <Table>
@@ -38,7 +41,7 @@ export function WatchlistTable({ entries, quotes }: WatchlistTableProps) {
           </Tr>
         </Thead>
         <Tbody>
-          {entries.map((entry) => {
+          {watchlist.map((entry) => {
             const quote = quotes.get(entry.instrumentId);
 
             return (
@@ -52,7 +55,9 @@ export function WatchlistTable({ entries, quotes }: WatchlistTableProps) {
                   <Price value={quote?.bestAsk} />
                 </Td>
                 <Td cellKind="number">
-                  {(quote?.bestAsk ?? 0) - (quote?.bestBid ?? 0)}
+                  <Price
+                    value={(quote?.bestAsk ?? 0) - (quote?.bestBid ?? 0)}
+                  />
                 </Td>
                 <Td cellKind="number">
                   <Price value={quote?.lastPrice} />

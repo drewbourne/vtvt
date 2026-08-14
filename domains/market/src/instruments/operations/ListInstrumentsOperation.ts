@@ -2,14 +2,7 @@ import * as z from "zod";
 import { Instrument } from "../models/Instrument.js";
 import { serviceOperation } from "@fbt/service";
 import { BrokerId } from "@fbt/accounts/models";
-
-const InstrumentField = z.enum([
-  "id",
-  "name",
-  "symbol",
-  "brokerId",
-  "brokerSymbolId",
-]);
+import { InstrumentField } from "../models/InstrumentField.js";
 
 const InstrumentIdFilter = z.object({
   field: z.literal("id"),

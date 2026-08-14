@@ -1,5 +1,6 @@
 import { runAction } from "@/next/runAction";
 import { InstrumentId } from "@fbt/market/models";
+import { NextRequest } from "next/server";
 import { createSSEHandler } from "use-next-sse";
 
 export const runtime = "nodejs";
@@ -11,7 +12,9 @@ export const GET = runAction(
   ({ request, instrumentsClient, livePricesClient }) =>
     createSSEHandler(async (send, close) => {
       const instrumentIdSearchParam =
-        request?.nextUrl?.searchParams.getAll("instrumentId") ?? [];
+        (request as NextRequest)?.nextUrl?.searchParams.getAll(
+          "instrumentId",
+        ) ?? [];
 
       const instrumentIds = instrumentIdSearchParam.map((id) =>
         InstrumentId.parse(id),

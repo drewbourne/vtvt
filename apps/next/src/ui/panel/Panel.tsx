@@ -6,7 +6,7 @@ const panel = sva({
   slots: ["root", "header", "content", "footer"],
   base: {
     root: {
-      width: '100%"',
+      width: "100%",
       display: "grid",
       gridTemplateAreas: `
         "panel-header"
@@ -22,6 +22,7 @@ const panel = sva({
     },
     header: {
       gridArea: "panel-header",
+      paddingInline: "2",
     },
     content: {
       gridArea: "panel-content",

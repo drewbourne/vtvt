@@ -737,6 +737,7 @@ __metadata:
     "@fbt/market": "workspace:*"
     "@fbt/nats": "workspace:*"
     "@fbt/otel": "workspace:*"
+    "@fbt/primitives": "workspace:*"
     "@fbt/watchlist": "workspace:*"
     "@logtape/logtape": "npm:^2.2.4"
     "@opentelemetry/api": "npm:^1.9.1"
